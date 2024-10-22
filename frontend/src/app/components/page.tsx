@@ -40,11 +40,11 @@ export default function ComponentPage() {
       >
         <div
           className={clsx(
-            'layout min-h-screen py-20',
+            'layout min-h-screen pl-12',
             mode === 'dark' ? 'text-white' : 'text-black'
           )}
         >
-          <h1>Built-in Components</h1>
+          <h3>Built-in Components</h3>
           <ArrowLink direction='left' className='mt-2' href='/'>
             Back to Home
           </ArrowLink>
