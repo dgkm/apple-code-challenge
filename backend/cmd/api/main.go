@@ -1,10 +1,10 @@
 package main
 
 import (
-	"crypto/sha256"
 	"database/sql"
-	"encoding/hex"
 	"fmt"
+	"interview/internal/signature"
+	"interview/types"
 	"net/http"
 	"time"
 
@@ -15,56 +15,6 @@ import (
 
 const dbFileName = "assets.db"
 
-type Asset struct {
-	ID        int
-	Host      string
-	Comment   string
-	Owner     string
-	IPs       []IP
-	Ports     []Port
-	Signature string
-}
-
-type IP struct {
-	Address   string
-	Signature string
-}
-
-type Port struct {
-	Port      int
-	Signature string
-}
-
-func generateSignature(asset Asset) Asset {
-	data := asset.Host + asset.Comment + asset.Owner
-	hash := sha256.New()
-	hash.Write([]byte(data))
-	signature := hex.EncodeToString(hash.Sum(nil))
-
-	newAsset := asset
-	newAsset.Signature = signature
-
-	for i, ip := range newAsset.IPs {
-		ipData := ip.Address
-		hash := sha256.New()
-		hash.Write([]byte(ipData))
-		ip.Signature = hex.EncodeToString(hash.Sum(nil))
-
-		newAsset.IPs[i] = ip
-	}
-
-	for i, port := range newAsset.Ports {
-		portData := fmt.Sprintf("%d", port.Port)
-		hash := sha256.New()
-		hash.Write([]byte(portData))
-		port.Signature = hex.EncodeToString(hash.Sum(nil))
-
-		newAsset.Ports[i] = port
-	}
-
-	return newAsset
-}
-
 func main() {
 	db, err := sql.Open("sqlite3", dbFileName)
 	if err != nil {
@@ -74,7 +24,7 @@ func main() {
 
 	router := gin.New()
 	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s %dBytes %s\"\n",
+		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s %dbytes %s\"\n",
 			param.ClientIP,
 			param.TimeStamp.Format(time.RFC1123),
 			param.Method,
@@ -99,9 +49,9 @@ func main() {
 		assetID := c.Query("id")
 		var rows *sql.Rows
 		if assetID != "" {
-			rows, err = db.Query("SELECT id, host, comment, owner FROM assets WHERE id = ?", assetID)
+			rows, err = db.Query("SELECT id, host, comment, owner, signature FROM assets WHERE id = ?", assetID)
 		} else {
-			rows, err = db.Query("SELECT id, host, comment, owner FROM assets limit 5")
+			rows, err = db.Query("SELECT id, host, comment, owner, signature FROM assets limit 500")
 		}
 
 		if err != nil {
@@ -110,33 +60,33 @@ func main() {
 		}
 		defer rows.Close()
 
-		var assets []Asset
+		var assets []types.Asset
 		for rows.Next() {
 			var id int
-			var host, comment, owner string
-			if err := rows.Scan(&id, &host, &comment, &owner); err != nil {
+			var host, comment, owner, assetSignature string
+			if err := rows.Scan(&id, &host, &comment, &owner, &assetSignature); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
 			}
 
-			var ips []IP
-			ipRows, err := db.Query("SELECT address FROM ips WHERE asset_id = ?", id)
+			var ips []types.IP
+			ipRows, err := db.Query("SELECT address, signature FROM ips WHERE asset_id = ?", id)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
 			}
 			defer ipRows.Close()
 			for ipRows.Next() {
-				var ipAddress string
-				if err := ipRows.Scan(&ipAddress); err != nil {
+				var ipAddress, ipSignature string
+				if err := ipRows.Scan(&ipAddress, &ipSignature); err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 					return
 				}
-				ips = append(ips, IP{Address: ipAddress})
+				ips = append(ips, types.IP{Address: ipAddress, Signature: ipSignature})
 			}
 
-			var ports []Port
-			portRows, err := db.Query("SELECT port FROM ports WHERE asset_id = ?", id)
+			var ports []types.Port
+			portRows, err := db.Query("SELECT port, signature FROM ports WHERE asset_id = ?", id)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
@@ -144,23 +94,25 @@ func main() {
 			defer portRows.Close()
 			for portRows.Next() {
 				var portNum int
-				if err := portRows.Scan(&portNum); err != nil {
+				var portSignature string
+				if err := portRows.Scan(&portNum, &portSignature); err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 					return
 				}
-				ports = append(ports, Port{Port: portNum})
+				ports = append(ports, types.Port{Port: portNum, Signature: portSignature})
 			}
 
-			asset := Asset{
-				ID:      id,
-				Host:    host,
-				Comment: comment,
-				Owner:   owner,
-				IPs:     ips,
-				Ports:   ports,
+			asset := types.Asset{
+				ID:        id,
+				Host:      host,
+				Comment:   comment,
+				Owner:     owner,
+				IPs:       ips,
+				Ports:     ports,
+				Signature: assetSignature,
 			}
 
-			processedAsset := generateSignature(asset)
+			processedAsset := *signature.GenerateAssetSignatures(&asset)
 
 			assets = append(assets, processedAsset)
 		}
