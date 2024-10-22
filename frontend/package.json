@@ -9,7 +9,9 @@
     "lint": "next lint",
     "lint:fix": "eslint src --fix && pnpm format",
     "lint:strict": "eslint --max-warnings=0 src",
-    "format": "prettier --write 'src/app/**/*.{js,jsx,ts,tsx,css,html}'"
+    "format": "prettier --write 'src/app/**/*.{js,jsx,ts,tsx,css,html}'",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "clsx": "^2.0.0",
@@ -27,7 +29,7 @@
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/forms": "^0.5.7",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^15.0.6",
     "@types/react": "^18.2.45",
     "@types/testing-library__jest-dom": "^5.14.9",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
