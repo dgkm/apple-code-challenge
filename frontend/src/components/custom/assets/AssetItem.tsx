@@ -1,12 +1,14 @@
-import { AssetType } from './asset.types';
+import { AssetType, IPType, PortType } from './asset.types';
 
 interface AssetProps {
   item: AssetType;
 }
 
 export const AssetItem = ({ item }: AssetProps) => {
-  const ips = (item.IPs || []).map((ip: any) => ip.Address).join(', ');
-  const ports = (item.Ports || []).map((port: any) => port.Port).join(', ');
+  const ips = (item.IPs || []).map((ip: IPType) => ip.Address).join(', ');
+  const ports = (item.Ports || [])
+    .map((port: PortType) => port.Port)
+    .join(', ');
   return (
     <a
       href={`/assets/${item.ID}`}
