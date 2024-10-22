@@ -78,21 +78,25 @@
   /* nav styles */
 
   nav {
-    @apply pb-4 border-b-2 border-gray-200 flex items-center gap-5 my-10 mx-auto max-w-5xl underline;
+    @apply sticky top-0 p-5 pb-4 border-b-2 border-gray-200 flex items-center gap-5 my-10 mx-auto max-w-5xl bg-gradient-to-r from-blue-200;
   }
 
-  nav a, nav span {
-    @apply text-gray-500;
+  nav a,
+  nav span {
+    @apply text-gray-600 font-medium;
   }
 
   nav a:hover {
     @apply text-black;
   }
 
-  main nav { 
+  main nav {
     @apply border-0;
   }
 
+  nav .active {
+    @apply font-bold;
+  }
 
   /* end nav styles */
 

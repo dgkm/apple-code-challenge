@@ -45,9 +45,9 @@ export default function ComponentPage() {
           )}
         >
           <h3>Built-in Components</h3>
-          <ArrowLink direction='left' className='mt-2' href='/'>
+          {/* <ArrowLink direction='left' className='mt-2' href='/'>
             Back to Home
-          </ArrowLink>
+          </ArrowLink> */}
 
           <div className='mt-8 flex flex-wrap gap-2'>
             <Button

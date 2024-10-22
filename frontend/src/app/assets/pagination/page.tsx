@@ -3,9 +3,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { AssetItem } from '@/components/assets/Asset';
-
-import Logo from '~/svg/Logo.svg';
+import { AssetItem } from '@/components/custom/assets/AssetItem';
+import { PageSection } from '@/components/custom/page/PageSection';
 
 export default function DefaultPage() {
   const [data, setData] = useState<any[]>([]);
@@ -44,22 +43,12 @@ export default function DefaultPage() {
   });
 
   return (
-    <main>
-      <section className='bg-white'>
-        <div className='flex min-h-screen flex-col items-center text-center'>
-          <div className='flex justify-center text-3xl font-bold'>
-            <Logo className='w-10' />
-            <span>Code challenge (Loading by Pagination)</span>
-          </div>
-          <div className='mt-8 w-full max-w-2xl mx-auto bg-gray-100 p-4'>
-            {sortedData.length === 0 ? (
-              <p>{isSorting ? 'Sorting...' : 'Loading...'}</p>
-            ) : (
-              <div>{renderedData}</div>
-            )}
-          </div>
-        </div>
-      </section>
-    </main>
+    <PageSection title='Loading Assets by Pagination'>
+      {sortedData.length === 0 ? (
+        <p>{isSorting ? 'Sorting...' : 'Loading...'}</p>
+      ) : (
+        <div>{renderedData}</div>
+      )}
+    </PageSection>
   );
 }
