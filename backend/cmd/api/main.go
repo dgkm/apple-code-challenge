@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -71,7 +72,20 @@ func main() {
 	}
 	defer db.Close()
 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s %dBytes %s\"\n",
+			param.ClientIP,
+			param.TimeStamp.Format(time.RFC1123),
+			param.Method,
+			param.Path,
+			param.Request.Proto,
+			param.StatusCode,
+			param.Latency,
+			param.BodySize,
+			param.ErrorMessage,
+		)
+	}))
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
@@ -87,7 +101,7 @@ func main() {
 		if assetID != "" {
 			rows, err = db.Query("SELECT id, host, comment, owner FROM assets WHERE id = ?", assetID)
 		} else {
-			rows, err = db.Query("SELECT id, host, comment, owner FROM assets")
+			rows, err = db.Query("SELECT id, host, comment, owner FROM assets limit 5")
 		}
 
 		if err != nil {
