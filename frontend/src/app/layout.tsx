@@ -5,7 +5,7 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
-import { Navbar } from '@/components/NavBar';
+import { Navbar } from '@/components/custom/NavBar';
 
 import { siteConfig } from '@/constant/config';
 
