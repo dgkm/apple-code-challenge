@@ -49,9 +49,9 @@ func main() {
 		assetID := c.Query("id")
 		var rows *sql.Rows
 		if assetID != "" {
-			rows, err = db.Query("SELECT id, host, comment, owner, signature FROM assets WHERE id = ?", assetID)
+			rows, err = db.Query("SELECT id, host, comment, owner, signature FROM assets WHERE id = ? order by host asc", assetID)
 		} else {
-			rows, err = db.Query("SELECT id, host, comment, owner, signature FROM assets limit 500")
+			rows, err = db.Query("SELECT id, host, comment, owner, signature FROM assets order by host asc limit 500")
 		}
 
 		if err != nil {
