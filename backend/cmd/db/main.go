@@ -1,32 +1,20 @@
 package main
 
 import (
-	"database/sql"
-	"interview/internal/generator"
+	"interview/internal/database"
+	"interview/internal/types"
 	"log"
 	"math/rand"
-	"os"
-	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const dbFileName = "assets.db"
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 func main() {
-	if _, err := os.Stat(dbFileName); err == nil {
-		os.Remove(dbFileName)
-	}
 
-	db, err := sql.Open("sqlite3", dbFileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
+	var err error
+
+	db := database.NewDatabase()
+	defer db.Pool.Close()
 
 	// Create the tables
 	createTablesSQL := `
@@ -54,25 +42,25 @@ func main() {
 			FOREIGN KEY(asset_id) REFERENCES assets(id)
 		);`
 
-	_, err = db.Exec(createTablesSQL)
+	_, err = db.Pool.Exec(createTablesSQL)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Prepare statements for inserts
-	insertAssetStmt, err := db.Prepare("INSERT INTO assets(host, comment, owner, signature) VALUES(?, ?, ?, ?)")
+	insertAssetStmt, err := db.Pool.Prepare("INSERT INTO assets(host, comment, owner, signature) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer insertAssetStmt.Close()
 
-	insertIPStmt, err := db.Prepare("INSERT INTO ips(asset_id, address, signature) VALUES(?, ?, ?)")
+	insertIPStmt, err := db.Pool.Prepare("INSERT INTO ips(asset_id, address, signature) VALUES(?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer insertIPStmt.Close()
 
-	insertPortStmt, err := db.Prepare("INSERT INTO ports(asset_id, port, signature) VALUES(?, ?, ?)")
+	insertPortStmt, err := db.Pool.Prepare("INSERT INTO ports(asset_id, port, signature) VALUES(?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +70,7 @@ func main() {
 	totalEntries := 10000
 	for i := 0; i < totalEntries; i++ {
 		// Insert asset
-		asset := generator.GenerateAsset()
+		asset := types.GenerateAsset()
 		result, err := insertAssetStmt.Exec(asset.Host, asset.Comment, asset.Owner, asset.Signature)
 		if err != nil {
 			log.Fatal(err)
@@ -95,7 +83,7 @@ func main() {
 
 		// Insert related IPs
 		for j := 0; j < rand.Intn(3)+1; j++ { // Each asset has 1-3 IPs
-			ip := generator.GenerateIP()
+			ip := types.GenerateIP()
 			_, err := insertIPStmt.Exec(assetID, ip.Address, ip.Signature)
 			if err != nil {
 				log.Fatal(err)
@@ -104,7 +92,7 @@ func main() {
 
 		// Insert related Ports
 		for j := 0; j < rand.Intn(5)+1; j++ { // Each asset has 1-5 ports
-			port := generator.GeneratePort()
+			port := types.GeneratePort()
 			_, err := insertPortStmt.Exec(assetID, port.Port, port.Signature)
 			if err != nil {
 				log.Fatal(err)
