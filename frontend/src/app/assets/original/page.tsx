@@ -8,7 +8,6 @@ import ButtonLink from '@/components/links/ButtonLink';
 import Logo from '~/svg/Logo.svg';
 
 export default function HomePage() {
-  const [data, setData] = useState<any[]>([]);
   const [sortedData, setSortedData] = useState<any[]>([]);
   const [isSorting, setIsSorting] = useState(false);
 
@@ -20,7 +19,6 @@ export default function HomePage() {
         );
         const result = await response.json();
 
-        setData(result.data);
         sortData(result.data); // Automatically sort after fetching
       } catch (err) {
         console.error('Error fetching data:', err);

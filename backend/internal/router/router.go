@@ -1,6 +1,7 @@
 package router
 
 import (
+	"interview/internal/cache"
 	"interview/internal/database"
 
 	"github.com/gin-gonic/gin"
@@ -9,15 +10,20 @@ import (
 type Router struct {
 	engine *gin.Engine
 	db     *database.Database
+	cache  *cache.Cache
 }
 
 func New(database *database.Database) *Router {
 	engine := gin.New()
 
+	cache := cache.New()
+
 	router := &Router{
 		engine: engine,
 		db:     database,
+		cache:  cache,
 	}
+
 	return router
 }
 

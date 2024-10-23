@@ -8,8 +8,8 @@ import (
 )
 
 func (r *Router) AddRoutes() {
-	r.engine.GET("/assets", r.getAssets)
-	r.engine.GET("/assets/:id", r.getAssetById)
+	r.engine.GET("/assets", r.cache.CachePage(r.getAssets))
+	r.engine.GET("/assets/:id", r.cache.CachePage(r.getAssetById))
 }
 
 func (r *Router) getAssets(c *gin.Context) {
