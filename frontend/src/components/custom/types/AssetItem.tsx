@@ -18,7 +18,7 @@ export const AssetItem = ({ item, link = true }: AssetProps) => {
       href={link ? `/assets/${item.ID}` : undefined}
       className={`flex flex-col items-center mb-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ${hoverClass}`}
     >
-      <div className='flex flex-col items-center justify-center text-3xl font-bold m-1 rounded-t-lg h-56 md:w-40 md:rounded-none md:rounded-s-lg bg-white'>
+      <div className='flex flex-col items-center justify-center text-3xl font-bold m-1 rounded-t-lg h-56 w-full md:w-56 md:rounded-none md:rounded-s-lg bg-white'>
         #{item.ID}
       </div>
       <div className='flex flex-col justify-between p-4'>
