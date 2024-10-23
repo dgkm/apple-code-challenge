@@ -69,9 +69,15 @@ const PageButton = ({ page, handleClick, currentPage }: PageButtonProps) => {
   );
 };
 
+const pageSize = 10;
+
 export default function Pagination({
+  totalRecords,
   totalPages,
-}: Readonly<{ totalPages: number }>) {
+}: Readonly<{
+  totalRecords: number;
+  totalPages: number;
+}>) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -87,11 +93,13 @@ export default function Pagination({
   return (
     <div className='hidden sm:flex sm:items-center sm:justify-between h-8 mb-5'>
       <div>
-        <p className='text-sm text-gray-700 w-40'>
+        <p className='text-sm text-gray-700 w-40 mr-4'>
           Showing{' '}
-          <span className='font-medium'>{currentPage * 10 - 10 + 1}</span> to{' '}
-          <span className='font-medium'>{currentPage * 10}</span> of{' '}
-          <span className='font-medium'>{totalPages}</span> results
+          <span className='font-medium'>
+            {currentPage * pageSize - pageSize + 1}
+          </span>{' '}
+          to <span className='font-medium'>{currentPage * pageSize}</span> of{' '}
+          <span className='font-medium'>{totalRecords}</span> results
         </p>
       </div>
       <div>

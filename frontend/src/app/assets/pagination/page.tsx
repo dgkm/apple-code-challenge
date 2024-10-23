@@ -33,16 +33,21 @@ export default async function PaginationPage(
     return <AssetItem key={item.ID} item={item} />;
   });
 
+  const pagination = (
+    <div className='mt-5 flex w-full justify-center m-5'>
+      <Pagination
+        totalPages={Math.floor(total / 10) + 1}
+        totalRecords={total}
+      />
+    </div>
+  );
+
   return (
     <PageSection title={paginationPageTitle}>
       <Search placeholder='Host Search' />
-      <div className='mt-5 flex w-full justify-center m-5'>
-        <Pagination totalPages={Math.floor(total / 10) + 1} />
-      </div>
+      {pagination}
       <div>{renderedData}</div>
-      <div className='mt-5 flex w-full justify-center m-5'>
-        <Pagination totalPages={Math.floor(total / 10) + 1} />
-      </div>
+      {pagination}
     </PageSection>
   );
 }
