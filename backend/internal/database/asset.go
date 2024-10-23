@@ -3,19 +3,46 @@ package database
 import (
 	"fmt"
 	"interview/internal/types"
+	"strconv"
 )
 
 const (
-	getAllAssets     = "SELECT id, host, comment, owner, signature FROM assets order by host desc limit 500 offset 20"
+	getAssetCount    = "SELECT count(1) cnt FROM assets"
+	getAllAssets     = "SELECT id, host, comment, owner, signature FROM assets order by host desc limit ? offset ?"
 	getAllAssetsById = "SELECT id, host, comment, owner, signature FROM assets WHERE id = ? order by host asc"
 )
+
+func (db *Database) GetAssetsCount() (int, error) {
+	return db.getAssetCount(getAssetCount)
+}
 
 func (db *Database) GetAllAssetsById(assetID string) ([]types.Asset, error) {
 	return db.getAssets(getAllAssetsById, assetID)
 }
 
-func (db *Database) GetAllAssets() ([]types.Asset, error) {
-	return db.getAssets(getAllAssets)
+func (db *Database) GetAllAssets(queryOptions types.QueryOptions) ([]types.Asset, error) {
+	size, _ := strconv.Atoi(queryOptions.Size)
+	page, _ := strconv.Atoi(queryOptions.Page)
+
+	return db.getAssets(getAllAssets, size, (page-1)*size)
+}
+
+func (db *Database) getAssetCount(query string, args ...any) (int, error) {
+	var count int
+
+	rows, err := db.Pool.Query(query, args...)
+
+	if err != nil {
+		return count, fmt.Errorf("error loading assets, %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		if err := rows.Scan(&count); err != nil {
+			return count, err
+		}
+	}
+	return count, nil
 }
 
 func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) {
