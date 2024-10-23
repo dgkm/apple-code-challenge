@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
+import { useLocalStorage } from 'usehooks-ts';
 
 export const searchParam = 'search';
 
@@ -12,11 +13,20 @@ export default function Search({
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  const [search, setSearch] = useLocalStorage(
+    'searchTerm',
+    searchParams.get(searchParam)?.toString(),
+    {
+      initializeWithValue: false,
+    }
+  );
+
   const handleSearch = useDebouncedCallback((term) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', '1');
     if (term) {
       params.set(searchParam, term);
+      setSearch(term);
     } else {
       params.delete(searchParam);
     }
@@ -38,7 +48,7 @@ export default function Search({
         onChange={(e) => {
           handleSearch(e.target.value);
         }}
-        defaultValue={searchParams.get(searchParam)?.toString()}
+        defaultValue={searchParams.get(searchParam)?.toString() ?? search}
       />
     </div>
   );
