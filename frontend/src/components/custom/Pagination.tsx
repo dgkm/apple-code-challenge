@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/20/solid';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ReactNode } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 const leftClass =
   'relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0';
@@ -81,12 +82,16 @@ export default function Pagination({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
+  const [page, setPage] = useLocalStorage('currentPage', 1, {
+    initializeWithValue: false,
+  });
 
-  const currentPage = Number(searchParams.get('page')) || 2;
+  const currentPage = Number(searchParams.get('page')) || page;
 
   const changePageNumber = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', pageNumber.toString());
+    setPage(pageNumber as number);
     replace(`${pathname}?${params.toString()}`);
   };
 
