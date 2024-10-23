@@ -7,13 +7,13 @@ import (
 )
 
 type Asset struct {
-	ID        int
-	Host      string
-	Comment   string
-	Owner     string
-	IPs       []IP
-	Ports     []Port
-	Signature string
+	ID        int    `json:"ID"`
+	Host      string `json:"Host"`
+	Comment   string `json:"Comment"`
+	Owner     string `json:"Owner"`
+	IPs       []IP   `json:"IPs"`
+	Ports     []Port `json:"Ports"`
+	Signature string `json:"Signature"`
 }
 
 func GenerateAsset() Asset {

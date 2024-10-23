@@ -7,8 +7,8 @@ import (
 )
 
 type Port struct {
-	Port      int
-	Signature string
+	Port      int    `json:"Port"`
+	Signature string `json:"Signature"`
 }
 
 func GeneratePort() Port {

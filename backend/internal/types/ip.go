@@ -7,8 +7,8 @@ import (
 )
 
 type IP struct {
-	Address   string
-	Signature string
+	Address   string `json:"Address"`
+	Signature string `json:"Signature"`
 }
 
 func GenerateIP() IP {
