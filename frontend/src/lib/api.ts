@@ -28,12 +28,13 @@ export const getAssetById = async (id: string): Promise<AssetType> => {
     'use server';
 
     const response = await fetch(
-        `${backendUrl}/assets?id=${id}&src=asset-details`,
+        `${backendUrl}/assets/${id}?src=asset-details`,
         {
           cache: 'no-store',
         }
       );
-      const assets: AssetType[] = await response.json();
-      
-      return assets[0];
+      const result: ResponseType<AssetType[]> = await response.json();
+
+      const { data = []} = result;
+      return data[0];
 }
