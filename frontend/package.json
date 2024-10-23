@@ -11,7 +11,8 @@
     "lint:strict": "eslint --max-warnings=0 src",
     "format": "prettier --write 'src/app/**/*.{js,jsx,ts,tsx,css,html}'",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "changelog": "changelog -u https://github.com/dgkm/apple-code-challenge/commit -f ../CHANGELOG.md"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
@@ -44,6 +45,7 @@
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "generate-changelog": "^1.8.0",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "lint-staged": "^12.5.0",
