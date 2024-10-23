@@ -1,14 +1,14 @@
 import { getAssets } from '@/lib/api';
 
-import { AssetItem } from '@/components/custom/types/AssetItem';
 import { PageSection } from '@/components/custom/page/PageSection';
+import { AssetItem } from '@/components/custom/types/AssetItem';
 
 import { paginationPageTitle } from '@/constant/constants';
 
 export const dynamic = 'force-dynamic';
 
 export default async function PaginationPage() {
-  const assets = await getAssets('pagination', true);
+  const assets = await getAssets(true);
 
   const renderedData = assets.map((item) => {
     return <AssetItem key={item.ID} item={item} />;

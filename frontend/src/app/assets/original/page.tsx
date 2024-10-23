@@ -3,25 +3,31 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
+import { AssetType } from '@/components/custom/types/types';
 import ButtonLink from '@/components/links/ButtonLink';
 
 import Logo from '~/svg/Logo.svg';
 
 export default function HomePage() {
-  const [sortedData, setSortedData] = useState<any[]>([]);
+  const [data, setData] = useState<AssetType[]>([]);
+  const [sortedData, setSortedData] = useState<AssetType[]>([]);
   const [isSorting, setIsSorting] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await fetch(
-          'http://localhost:8080/assets?page=1&size=10000'
+          'http://localhost:8080/assets/original?page=1&size=10000'
         );
+
         const result = await response.json();
 
-        sortData(result.data); // Automatically sort after fetching
+        setData(result?.data);
+        sortData(result?.data); // Automatically sort after fetching
       } catch (err) {
         console.error('Error fetching data:', err);
+        setData([]);
+        sortData([]);
       }
     }
 
@@ -36,7 +42,7 @@ export default function HomePage() {
       );
       setSortedData(newSortedData);
       setIsSorting(false);
-    }, 1000); // Artificial delay to slow down sorting
+    }, 100); // Artificial delay to slow down sorting
   };
 
   const renderedData = sortedData.map((item, index) => {

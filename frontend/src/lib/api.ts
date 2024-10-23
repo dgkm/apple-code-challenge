@@ -5,12 +5,12 @@ import { AssetType,ResponseType } from "@/components/custom/types/types";
 import { backendUrl } from "@/constant/env";
 
 
-export const getAssets = async (source = 'pagination', sorted = false): Promise<AssetType[]> => {
+export const getAssets = async (sorted = false): Promise<AssetType[]> => {
     'use server';
 
-    const time = Date.now().toString();
+    // const time = Date.now().toString();
 
-    const response = await fetch(`${backendUrl}/assets?src=${source}&time=${time}`, {
+    const response = await fetch(`${backendUrl}/assets`, {
         next: { revalidate: 0 }
       });
       const result: ResponseType<AssetType[]> = await response.json();
@@ -28,7 +28,7 @@ export const getAssetById = async (id: string): Promise<AssetType> => {
     'use server';
 
     const response = await fetch(
-        `${backendUrl}/assets/${id}?src=asset-details`,
+        `${backendUrl}/assets/${id}`,
         {
           cache: 'no-store',
         }
