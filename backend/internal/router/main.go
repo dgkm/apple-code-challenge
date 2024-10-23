@@ -25,6 +25,7 @@ func (r *Router) Initialize() {
 	//configure engine
 	r.ConfigLogger()
 	r.ConfigCors()
+	r.ConfigGzip()
 
 	//add routes
 	r.AddRoutes()

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,4 +33,8 @@ func (r *Router) ConfigCors() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+}
+
+func (r *Router) ConfigGzip() {
+	r.engine.Use(gzip.Gzip(gzip.DefaultCompression))
 }
