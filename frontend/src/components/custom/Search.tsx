@@ -9,7 +9,8 @@ export const searchParam = 'search';
 
 export default function Search({
   placeholder,
-}: Readonly<{ placeholder: string }>) {
+  onChange,
+}: Readonly<{ placeholder: string; onChange?: (term: string) => void }>) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -28,6 +29,7 @@ export default function Search({
       params.set(searchParam, search);
       replace(`${pathname}?${params.toString()}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replace, search, searchParams]);
 
   const handleSearch = useDebouncedCallback((term) => {
@@ -36,8 +38,10 @@ export default function Search({
     if (term) {
       params.set(searchParam, term);
       setSearch(term);
+      onChange && onChange(term);
     } else {
       params.delete(searchParam);
+      onChange && onChange('');
     }
     replace(`${pathname}?${params.toString()}`);
   }, 500);

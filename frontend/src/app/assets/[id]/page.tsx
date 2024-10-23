@@ -2,7 +2,7 @@
 
 import { notFound } from 'next/navigation';
 
-import { getAssetById } from '@/lib/api';
+import { getAssetById } from '@/lib/api.server';
 
 import { PageSection } from '@/components/custom/page/PageSection';
 import { AssetItem } from '@/components/custom/types/AssetItem';

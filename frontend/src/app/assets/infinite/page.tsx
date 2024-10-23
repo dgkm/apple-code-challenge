@@ -1,55 +1,89 @@
-import { getAssets } from '@/lib/api';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useLocalStorage } from 'usehooks-ts';
+
+import { getAssetsClient } from '@/lib/api.client';
 
 import { PageSection } from '@/components/custom/page/PageSection';
-import Pagination from '@/components/custom/Pagination';
 import Search from '@/components/custom/Search';
 import { AssetItem } from '@/components/custom/types/AssetItem';
+import { AssetType } from '@/components/custom/types/types';
 
 import { infinitePageTitle } from '@/constant/constants';
 
-export const dynamic = 'force-dynamic';
-export const fetchCache = 'default-no-store';
-
-export default async function InfinitePage(
-  props: Readonly<{
-    searchParams?: Promise<{
-      search?: string;
-      page?: string;
-    }>;
-  }>
-) {
-  const searchParams = await props.searchParams;
-
-  const search = searchParams?.search ?? '';
-  const currentPage = Number(searchParams?.page) || 1;
-
-  const {
-    data: assets = [],
-    metadata: { total },
-  } = await getAssets({
-    page: currentPage,
-    search,
+export default function InfinitePage() {
+  const [page, setPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [assets, setAssets] = useState<AssetType[]>([]);
+  const [search, setSearch] = useLocalStorage('searchTerm', '', {
+    initializeWithValue: false,
   });
+
+  const { ref, inView } = useInView();
+
+  const handleSearch = (term: string) => {
+    setSearch(term);
+  };
+
+  const initLoadAssets = async () => {
+    const {
+      data = [],
+      metadata: { total },
+    } = await getAssetsClient({
+      page: page,
+      search: search,
+    });
+
+    setAssets(data);
+    setPage(1);
+    setTotalRecords(total);
+  };
+
+  const loadMoreAssets = async () => {
+    const {
+      data = [],
+      metadata: { total },
+    } = await getAssetsClient({
+      page: page,
+      search: search,
+    });
+
+    setAssets((assets) => [...assets, ...data]);
+    setPage((page) => page + 1);
+    setTotalRecords(total);
+  };
+
+  useEffect(() => {
+    initLoadAssets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
+
+  useEffect(() => {
+    if (inView && page < totalRecords / 10) {
+      loadMoreAssets();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
   const renderedData = assets.map((item) => {
     return <AssetItem key={item.ID} item={item} />;
   });
 
-  const pagination = (
-    <div className='mt-5 flex w-full justify-center m-5'>
-      <Pagination
-        totalPages={Math.floor(total / 10) + 1}
-        totalRecords={total}
-      />
+  const totalLoaded = (
+    <div className='m-6'>
+      Total Loaded: {assets?.length} of {totalRecords}
     </div>
   );
 
   return (
     <PageSection title={infinitePageTitle}>
-      <Search placeholder='Host Search' />
-      {pagination}
+      <Search placeholder='Host Search' onChange={handleSearch} />
+      {totalLoaded}
       <div>{renderedData}</div>
-      {pagination}
+      <div ref={ref}>Loading...</div>
+      {totalLoaded}
     </PageSection>
   );
 }

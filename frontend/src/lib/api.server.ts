@@ -11,16 +11,16 @@ interface QueryOptions {
 }
 
 export const getAssets = async ({page = 1, size = 10, search}: QueryOptions): Promise<ResponseType<AssetType[]>> => {
-    'use server';
+  'use server';
 
-    const response = await fetch(`${backendUrl}/assets?page=${page}&size=${size}${search ? '&search=' + search : ''}`, {
-        next: { revalidate: 0 }
-      });
-      const result: ResponseType<AssetType[]> = await response.json();
+  const response = await fetch(`${backendUrl}/assets?page=${page}&size=${size}${search ? '&search=' + search : ''}`, {
+      next: { revalidate: 0 }
+    });
+    const result: ResponseType<AssetType[]> = await response.json();
 
-      revalidatePath('/assets')
-    
-      return result
+    revalidatePath('/assets')
+  
+    return result
 }
 
 export const getAssetById = async (id: string): Promise<AssetType> => {

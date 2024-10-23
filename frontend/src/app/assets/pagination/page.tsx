@@ -1,4 +1,4 @@
-import { getAssets } from '@/lib/api';
+import { getAssets } from '@/lib/api.server';
 
 import { PageSection } from '@/components/custom/page/PageSection';
 import Pagination from '@/components/custom/Pagination';
@@ -8,6 +8,7 @@ import { AssetItem } from '@/components/custom/types/AssetItem';
 import { paginationPageTitle } from '@/constant/constants';
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'default-no-store';
 
 export default async function PaginationPage(
   props: Readonly<{
