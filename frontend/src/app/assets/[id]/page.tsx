@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation';
 
 import { getAssetById } from '@/lib/api';
 
-import { AssetType } from '@/components/custom/types/types';
-import { AssetItem } from '@/components/custom/types/AssetItem';
 import { PageSection } from '@/components/custom/page/PageSection';
+import { AssetItem } from '@/components/custom/types/AssetItem';
+import { AssetType } from '@/components/custom/types/types';
 
 import { detailsPageTitle } from '@/constant/constants';
 
@@ -18,7 +18,7 @@ interface AssetDetailsPageProps {
 
 export default async function AssetDetailsPage({
   params,
-}: AssetDetailsPageProps) {
+}: Readonly<AssetDetailsPageProps>) {
   'use server';
 
   const { id } = params;
@@ -28,10 +28,10 @@ export default async function AssetDetailsPage({
     return notFound();
   }
 
-  const renderedData = <AssetItem item={asset} />;
+  const renderedData = <AssetItem item={asset} link={false} />;
 
   return (
-    <PageSection title={`${detailsPageTitle}${id}`}>
+    <PageSection title={`${detailsPageTitle}${id} - ${asset.Host}`}>
       <div>{renderedData}</div>
     </PageSection>
   );

@@ -2,17 +2,21 @@ import { AssetType, IPType, PortType } from './types';
 
 interface AssetProps {
   item: AssetType;
+  link?: boolean;
 }
 
-export const AssetItem = ({ item }: AssetProps) => {
+export const AssetItem = ({ item, link = true }: AssetProps) => {
   const ips = (item.IPs || []).map((ip: IPType) => ip.Address).join(', ');
   const ports = (item.Ports || [])
     .map((port: PortType) => port.Port)
     .join(', ');
+
+  const hoverClass = link ? 'hover:bg-gray-100 dark:hover:bg-gray-700' : '';
+
   return (
     <a
-      href={`/assets/${item.ID}`}
-      className='flex flex-col items-center mb-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700'
+      href={link ? `/assets/${item.ID}` : undefined}
+      className={`flex flex-col items-center mb-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ${hoverClass}`}
     >
       <div className='flex flex-col items-center justify-center text-3xl font-bold m-1 rounded-t-lg h-56 md:w-40 md:rounded-none md:rounded-s-lg bg-white'>
         #{item.ID}
