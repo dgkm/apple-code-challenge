@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export const fetchCache = 'default-no-store';
 
 export default async function InfinitePage() {
-  const assets = await getAssets();
+  const { data: assets = [] } = await getAssets({});
 
   const renderedData = assets.map((item) => {
     return <AssetItem key={item.ID} item={item} />;

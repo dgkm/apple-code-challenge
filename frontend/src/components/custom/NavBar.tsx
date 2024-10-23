@@ -23,7 +23,7 @@ export const Navbar = () => {
         <MenuItem href='/components'>Included Components</MenuItem>
       </nav>
 
-      <div className='flex max-w-5xl flex-col items-center text-right pb-8 pt-0'>
+      <div className='flex max-w-5xl flex-col items-center text-right pb-4 pt-0'>
         {pathname !== '/' ? (
           <ArrowLink direction='left' className='mt-2' href='/'>
             Back to Home
