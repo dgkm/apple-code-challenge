@@ -21,8 +21,6 @@ func (db *Database) GetAllAssets() ([]types.Asset, error) {
 func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) {
 	var assets []types.Asset
 
-	fmt.Println(query, args)
-
 	rows, err := db.Pool.Query(query, args...)
 
 	if err != nil {
