@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 
-import { AssetType } from "@/components/custom/assets/asset.types";
+import { AssetType,ResponseType } from "@/components/custom/types/types";
 
 import { backendUrl } from "@/constant/env";
 
@@ -13,8 +13,11 @@ export const getAssets = async (source = 'pagination', sorted = false): Promise<
     const response = await fetch(`${backendUrl}/assets?src=${source}&time=${time}`, {
         next: { revalidate: 0 }
       });
-      const result = await response.json();
-      const sortedData = sorted ? [...result].sort((a, b) => a.Host.localeCompare(b.Host)) : result;
+      const result: ResponseType<AssetType[]> = await response.json();
+
+      const { data = []} = result;
+
+      const sortedData = sorted ? [...data].sort((a, b) => a.Host.localeCompare(b.Host)) : result?.data;
 
       revalidatePath('/assets')
     

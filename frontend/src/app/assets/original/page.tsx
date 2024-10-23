@@ -15,11 +15,13 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:8080/assets');
+        const response = await fetch(
+          'http://localhost:8080/assets?page=1&size=10000'
+        );
         const result = await response.json();
 
-        setData(result);
-        sortData(result); // Automatically sort after fetching
+        setData(result.data);
+        sortData(result.data); // Automatically sort after fetching
       } catch (err) {
         console.error('Error fetching data:', err);
       }

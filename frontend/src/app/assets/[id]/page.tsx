@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 
 import { getAssetById } from '@/lib/api';
 
-import { AssetType } from '@/components/custom/assets/asset.types';
-import { AssetItem } from '@/components/custom/assets/AssetItem';
+import { AssetType } from '@/components/custom/types/types';
+import { AssetItem } from '@/components/custom/types/AssetItem';
 import { PageSection } from '@/components/custom/page/PageSection';
 
 import { detailsPageTitle } from '@/constant/constants';

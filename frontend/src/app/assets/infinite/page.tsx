@@ -1,6 +1,6 @@
 import { getAssets } from '@/lib/api';
 
-import { AssetItem } from '@/components/custom/assets/AssetItem';
+import { AssetItem } from '@/components/custom/types/AssetItem';
 import { PageSection } from '@/components/custom/page/PageSection';
 
 import { infinitePageTitle } from '@/constant/constants';

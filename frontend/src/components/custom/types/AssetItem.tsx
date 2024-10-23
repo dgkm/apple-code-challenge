@@ -1,4 +1,4 @@
-import { AssetType, IPType, PortType } from './asset.types';
+import { AssetType, IPType, PortType } from './types';
 
 interface AssetProps {
   item: AssetType;

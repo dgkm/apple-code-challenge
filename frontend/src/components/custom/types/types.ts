@@ -18,3 +18,17 @@ export interface AssetType {
     Ports: PortType[];
     Signature: string;
   }
+
+  export interface Pagination {
+    page: string;
+    size: string;
+  }
+
+  export interface MetadataType extends Pagination {
+    total: number
+  }
+
+  export interface ResponseType<T> {
+    data: T,
+    metadata: MetadataType
+  }
