@@ -3,13 +3,12 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { AssetType } from '@/components/custom/types/types';
+import { AssetType, IPType, PortType } from '@/components/custom/types/types';
 import ButtonLink from '@/components/links/ButtonLink';
 
 import Logo from '~/svg/Logo.svg';
 
 export default function HomePage() {
-  const [data, setData] = useState<AssetType[]>([]);
   const [sortedData, setSortedData] = useState<AssetType[]>([]);
   const [isSorting, setIsSorting] = useState(false);
 
@@ -22,11 +21,10 @@ export default function HomePage() {
 
         const result = await response.json();
 
-        setData(result?.data);
         sortData(result?.data); // Automatically sort after fetching
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Error fetching data:', err);
-        setData([]);
         sortData([]);
       }
     }
@@ -34,7 +32,7 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  const sortData = (fetchedData: any[]) => {
+  const sortData = (fetchedData: AssetType[]) => {
     setIsSorting(true);
     setTimeout(() => {
       const newSortedData = [...fetchedData].sort((a, b) =>
@@ -45,18 +43,18 @@ export default function HomePage() {
     }, 100); // Artificial delay to slow down sorting
   };
 
-  const renderedData = sortedData.map((item, index) => {
+  const renderedData = sortedData.map((item) => {
     return (
-      <div key={index} className='p-4'>
+      <div key={item.ID} className='p-4'>
         <p>{`ID: ${item.ID}`}</p>
         <p>{`Host: ${item.Host}`}</p>
         <p>{`Comment: ${item.Comment}`}</p>
         <p>{`Owner: ${item.Owner}`}</p>
         <p>{`IPs: ${(item.IPs || [])
-          .map((ip: any) => ip.Address)
+          .map((ip: IPType) => ip.Address)
           .join(', ')}`}</p>
         <p>{`Ports: ${(item.Ports || [])
-          .map((port: any) => port.Port)
+          .map((port: PortType) => port.Port)
           .join(', ')}`}</p>
       </div>
     );
