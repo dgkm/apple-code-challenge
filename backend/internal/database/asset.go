@@ -6,25 +6,37 @@ import (
 	"strconv"
 )
 
+const likeFilter = "like '%' || ? || '%'"
+
 const (
-	getAssetCount    = "SELECT count(1) cnt FROM assets"
-	getAllAssets     = "SELECT id, host, comment, owner, signature FROM assets order by host desc limit ? offset ?"
-	getAllAssetsById = "SELECT id, host, comment, owner, signature FROM assets WHERE id = ? order by host asc"
+	getAssetCount           = "SELECT count(1) cnt FROM assets"
+	getAssetCountWithSearch = "SELECT count(1) cnt FROM assets where host " + likeFilter
+	getAllAssets            = "SELECT id, host, comment, owner, signature FROM assets order by host asc limit ? offset ?"
+	getAllAssetsWithSearch  = "SELECT id, host, comment, owner, signature FROM assets where host " + likeFilter + " order by host asc limit ? offset ?"
+	getAllAssetsById        = "SELECT id, host, comment, owner, signature FROM assets WHERE id = ? order by host asc"
 )
 
-func (db *Database) GetAssetsCount() (int, error) {
-	return db.getAssetCount(getAssetCount)
+func (db *Database) GetAssetsCount(searchTerm string) (int, error) {
+	if searchTerm != "" {
+		return db.getAssetCount(getAssetCountWithSearch, searchTerm)
+	} else {
+		return db.getAssetCount(getAssetCount)
+	}
+}
+
+func (db *Database) GetAllAssets(queryOptions types.QueryOptions, searchTerm string) ([]types.Asset, error) {
+	size, _ := strconv.Atoi(queryOptions.Size)
+	page, _ := strconv.Atoi(queryOptions.Page)
+
+	if searchTerm != "" {
+		return db.getAssets(getAllAssetsWithSearch, searchTerm, size, (page-1)*size)
+	} else {
+		return db.getAssets(getAllAssets, size, (page-1)*size)
+	}
 }
 
 func (db *Database) GetAllAssetsById(assetID string) ([]types.Asset, error) {
 	return db.getAssets(getAllAssetsById, assetID)
-}
-
-func (db *Database) GetAllAssets(queryOptions types.QueryOptions) ([]types.Asset, error) {
-	size, _ := strconv.Atoi(queryOptions.Size)
-	page, _ := strconv.Atoi(queryOptions.Page)
-
-	return db.getAssets(getAllAssets, size, (page-1)*size)
 }
 
 func (db *Database) getAssetCount(query string, args ...any) (int, error) {
@@ -88,5 +100,10 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 
 		assets = append(assets, asset)
 	}
+
+	if assets == nil {
+		assets = make([]types.Asset, 0)
+	}
+
 	return assets, nil
 }
