@@ -103,8 +103,11 @@ export default function Pagination({
           <span className='font-medium'>
             {currentPage * pageSize - pageSize + 1}
           </span>{' '}
-          to <span className='font-medium'>{currentPage * pageSize}</span> of{' '}
-          <span className='font-medium'>{totalRecords}</span> results
+          to{' '}
+          <span className='font-medium'>
+            {Math.min(currentPage * pageSize, totalRecords)}
+          </span>{' '}
+          of <span className='font-medium'>{totalRecords}</span> results
         </p>
       </div>
       <div>

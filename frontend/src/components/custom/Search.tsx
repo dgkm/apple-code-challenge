@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -20,6 +21,14 @@ export default function Search({
       initializeWithValue: false,
     }
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (search) {
+      params.set(searchParam, search);
+      replace(`${pathname}?${params.toString()}`);
+    }
+  }, [replace, search, searchParams]);
 
   const handleSearch = useDebouncedCallback((term) => {
     const params = new URLSearchParams(searchParams);
