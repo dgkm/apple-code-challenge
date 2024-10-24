@@ -3,14 +3,17 @@
 load-db:
 	cd backend && go run cmd/db/main.go
 
-start-api:
+start-backend:
 	cd backend && go run cmd/api/main.go
 
-start-dev:
+test-backend:
+	cd backend && go test -v "./tests/..."
+
+start-frontend-dev:
 	cd frontend && pnpm dev
 
-build-app:
+build-frontend:
 	cd frontend && pnpm build
 
-start-app:
+start-frontend:
 	cd frontend && pnpm start
