@@ -12,7 +12,8 @@ const (
 
 func (db *Database) FindIPsByAssetIdSpawn(wg *sync.WaitGroup, id int) ([]types.IP, error) {
 	defer wg.Done()
-	return db.FindIPsByAssetId(id)
+	ips, err := db.FindIPsByAssetId(id)
+	return ips, err
 }
 
 func (db *Database) FindIPsByAssetId(id int) ([]types.IP, error) {

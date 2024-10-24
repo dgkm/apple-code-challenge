@@ -12,7 +12,8 @@ const (
 
 func (db *Database) FindPortsByAssetIdSpawn(wg *sync.WaitGroup, id int) ([]types.Port, error) {
 	defer wg.Done()
-	return db.FindPortsByAssetId(id)
+	ports, err := db.FindPortsByAssetId(id)
+	return ports, err
 }
 
 func (db *Database) FindPortsByAssetId(id int) ([]types.Port, error) {
