@@ -13,6 +13,7 @@ type Cache struct {
 }
 
 const cacheExpiry = time.Minute * 10
+const cacheEnabled = false
 
 func New() *Cache {
 	store := persistence.NewInMemoryStore(time.Second)
@@ -24,5 +25,8 @@ func New() *Cache {
 }
 
 func (c *Cache) CachePage(handle gin.HandlerFunc) gin.HandlerFunc {
-	return cache.CachePage(c.store, cacheExpiry, handle)
+	if cacheEnabled == true {
+		return cache.CachePage(c.store, cacheExpiry, handle)
+	}
+	return handle
 }
