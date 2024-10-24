@@ -1,3 +1,4 @@
+import { ContentWithTooltip } from './Content';
 import { AssetType, IPType, PortType } from './types';
 
 interface AssetProps {
@@ -6,21 +7,34 @@ interface AssetProps {
 }
 
 export const AssetItem = ({ item, link = true }: AssetProps) => {
-  const ips = (item.IPs || []).map((ip: IPType) => ip.Address).join(', ');
-  const ports = (item.Ports || [])
-    .map((port: PortType) => port.Port)
-    .join(', ');
+  const ips = (item.IPs || []).map((ip: IPType, index) => (
+    <ContentWithTooltip
+      key={ip.Address}
+      content={ip.Address}
+      tooltip={ip.Signature}
+      last={index > item.IPs.length - 2}
+    />
+  ));
+  const ports = (item.Ports || []).map((port: PortType, index) => (
+    <ContentWithTooltip
+      key={port.Port}
+      content={port.Port}
+      tooltip={port.Signature}
+      last={index > item.Ports.length - 2}
+    />
+  ));
 
-  const hoverClass = link ? 'hover:bg-gray-100 dark:hover:bg-gray-700' : '';
+  const hoverClass = link ? 'hover:bg-gray-100 dark:hover:bg-gray-200' : '';
 
   return (
-    <a
-      href={link ? `/assets/${item.ID}` : undefined}
-      className={`flex flex-col items-center mb-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ${hoverClass}`}
-    >
-      <div className='flex flex-col items-center justify-center text-3xl font-bold m-1 rounded-t-lg h-56 w-full md:w-56 md:rounded-none md:rounded-s-lg bg-white'>
-        #{item.ID}
-      </div>
+    <div className='flex flex-col items-center mb-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800'>
+      <a href={link ? `/assets/${item.ID}` : undefined}>
+        <div
+          className={`flex flex-col items-center justify-center text-3xl font-bold m-1 rounded-t-lg h-56 w-full md:w-56 md:rounded-none md:rounded-s-lg bg-white ${hoverClass}`}
+        >
+          #{item.ID}
+        </div>
+      </a>
       <div className='flex flex-col justify-between p-4'>
         <span className='text-3xl mb-2 font-bold tracking-tight text-gray-900 dark:text-white text-left'>
           {item.Host}
@@ -41,6 +55,6 @@ export const AssetItem = ({ item, link = true }: AssetProps) => {
           Signature: {item.Signature}
         </span>
       </div>
-    </a>
+    </div>
   );
 };

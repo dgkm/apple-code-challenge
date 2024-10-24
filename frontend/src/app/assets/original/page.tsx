@@ -78,6 +78,7 @@ export default function HomePage() {
           </ButtonLink>
 
           <div className='mt-8 w-full max-w-2xl mx-auto bg-gray-100 p-4'>
+            <div className='text-lg'>Total Loaded: {sortedData.length}</div>
             {sortedData.length === 0 ? (
               <p>{isSorting ? 'Sorting...' : 'Loading...'}</p>
             ) : (
