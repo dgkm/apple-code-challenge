@@ -1,5 +1,6 @@
 import { ContentWithTooltip } from './Content';
 import { AssetType, IPType, PortType } from './types';
+import { Card, CardContent, CardHeader, CardItem } from '../card/Card';
 
 interface AssetProps {
   item: AssetType;
@@ -24,37 +25,20 @@ export const AssetItem = ({ item, link = true }: AssetProps) => {
     />
   ));
 
-  const hoverClass = link ? 'hover:bg-gray-100 dark:hover:bg-gray-200' : '';
-
   return (
-    <div className='flex flex-col items-center mb-4 bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800'>
-      <a href={link ? `/assets/${item.ID}` : undefined}>
-        <div
-          className={`flex flex-col items-center justify-center text-3xl font-bold m-1 rounded-t-lg h-56 w-full md:w-56 md:rounded-none md:rounded-s-lg bg-white ${hoverClass}`}
-        >
-          #{item.ID}
-        </div>
-      </a>
-      <div className='flex flex-col justify-between p-4'>
-        <span className='text-3xl mb-2 font-bold tracking-tight text-gray-900 dark:text-white text-left'>
-          {item.Host}
-        </span>
-        <span className='text-sm mb-2 font-bold tracking-tight text-gray-900 dark:text-white text-left'>
-          Owner: {item.Owner}
-        </span>
-        <span className='text-sm mb-2 font-bold text-gray-700 dark:text-gray-400 text-left'>
-          Comment: {item.Comment}
-        </span>
-        <span className='text-sm mb-2 text-gray-900 dark:text-white text-left'>
-          IPs: {ips}
-        </span>
-        <span className='text-sm mb-2 text-gray-900 dark:text-white text-left'>
-          Ports: {ports}
-        </span>
-        <span className='text-sm mb-2 text-gray-700 dark:text-gray-400 text-left truncate w-30 break-all text-wrap'>
-          Signature: {item.Signature}
-        </span>
-      </div>
-    </div>
+    <Card>
+      <CardHeader
+        title={`#${item.ID}`}
+        link={link ? `/assets/${item.ID}` : undefined}
+      />
+      <CardContent>
+        <CardItem type='one'>{item.Host}</CardItem>
+        <CardItem type='two'>Owner: {item.Owner}</CardItem>
+        <CardItem type='three'>Comment: {item.Comment}</CardItem>
+        <CardItem type='four'>IPs: {ips}</CardItem>
+        <CardItem type='four'>Ports: {ports}</CardItem>
+        <CardItem type='five'>Signature: {item.Signature}</CardItem>
+      </CardContent>
+    </Card>
   );
 };
