@@ -15,6 +15,7 @@ const (
 var (
 	enableConcurreny = env.GetBool("CONCURRENCY_ENABLED")
 	forceMaxPageSize = env.GetBool("FORCE_MAX_PAGE_SIZE")
+	maxPageSize      = env.GetInt("MAX_PAGE_SIZE")
 )
 
 const (
@@ -38,6 +39,9 @@ func (db *Database) GetAllAssets(queryOptions types.QueryOptions, searchTerm str
 
 	if forceMaxPageSize {
 		size = 10
+		if maxPageSize > 1 && maxPageSize <= 100 {
+			size = maxPageSize
+		}
 	}
 
 	page, _ := strconv.Atoi(queryOptions.Page)
