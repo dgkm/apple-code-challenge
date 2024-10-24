@@ -7,7 +7,9 @@ import { paginationPageTitle } from '@/constant/constants';
 export default function PaginationLoadingPage() {
   return (
     <PageSection title={paginationPageTitle}>
-      <p>Error occoured...</p>
+      <div className='font-bold text-red-500'>
+        API data loading error occoured... (server)
+      </div>
     </PageSection>
   );
 }

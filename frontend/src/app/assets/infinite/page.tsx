@@ -17,6 +17,7 @@ export default function InfinitePage() {
   const [page, setPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [assets, setAssets] = useState<AssetType[]>([]);
+  const [error, setError] = useState<boolean>(false);
   const [search, setSearch] = useLocalStorage('searchTerm', '', {
     initializeWithValue: false,
   });
@@ -28,31 +29,41 @@ export default function InfinitePage() {
   };
 
   const initLoadAssets = async () => {
-    const {
-      data = [],
-      metadata: { total },
-    } = await getAssetsClient({
-      page: page,
-      search: search,
-    });
+    try {
+      setError(false);
+      const {
+        data = [],
+        metadata: { total },
+      } = await getAssetsClient({
+        page: page,
+        search: search,
+      });
 
-    setAssets(data);
-    setPage(1);
-    setTotalRecords(total);
+      setAssets(data);
+      setPage(1);
+      setTotalRecords(total);
+    } catch (e) {
+      setError(true);
+    }
   };
 
   const loadMoreAssets = async () => {
-    const {
-      data = [],
-      metadata: { total },
-    } = await getAssetsClient({
-      page: page,
-      search: search,
-    });
+    try {
+      setError(false);
+      const {
+        data = [],
+        metadata: { total },
+      } = await getAssetsClient({
+        page: page,
+        search: search,
+      });
 
-    setAssets((assets) => [...assets, ...data]);
-    setPage((page) => page + 1);
-    setTotalRecords(total);
+      setAssets((assets) => [...assets, ...data]);
+      setPage((page) => page + 1);
+      setTotalRecords(total);
+    } catch (e) {
+      setError(true);
+    }
   };
 
   useEffect(() => {
@@ -79,11 +90,19 @@ export default function InfinitePage() {
 
   return (
     <PageSection title={infinitePageTitle}>
-      <Search placeholder='Host Search' onChange={handleSearch} />
-      {totalLoaded}
-      <div>{renderedData}</div>
-      <div ref={ref}>Loading...</div>
-      {totalLoaded}
+      {!error ? (
+        <>
+          <Search placeholder='Host Search' onChange={handleSearch} />
+          {totalLoaded}
+          <div>{renderedData}</div>
+          <div ref={ref}>Loading...</div>
+          {totalLoaded}
+        </>
+      ) : (
+        <div className='m-5 font-bold text-red-500'>
+          API data loading error occoured... (client)
+        </div>
+      )}
     </PageSection>
   );
 }

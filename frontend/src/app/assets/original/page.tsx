@@ -13,10 +13,12 @@ import Logo from '~/svg/Logo.svg';
 export default function HomePage() {
   const [sortedData, setSortedData] = useState<AssetType[]>([]);
   const [isSorting, setIsSorting] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setError(false);
         const response = await fetch(
           `${backendUrl}/assets/original?page=1&size=10000`
         );
@@ -28,6 +30,7 @@ export default function HomePage() {
         // eslint-disable-next-line no-console
         console.error('Error fetching data:', err);
         sortData([]);
+        setError(true);
       }
     }
 
@@ -77,14 +80,20 @@ export default function HomePage() {
             See all included components
           </ButtonLink>
 
-          <div className='mt-8 w-full max-w-2xl mx-auto bg-gray-100 p-4'>
-            <div className='text-lg'>Total Loaded: {sortedData.length}</div>
-            {sortedData.length === 0 ? (
-              <p>{isSorting ? 'Sorting...' : 'Loading...'}</p>
-            ) : (
-              <div>{renderedData}</div>
-            )}
-          </div>
+          {!error ? (
+            <div className='mt-8 w-full max-w-2xl mx-auto bg-gray-100 p-4'>
+              <div className='text-lg'>Total Loaded: {sortedData.length}</div>
+              {sortedData.length === 0 ? (
+                <p>{isSorting ? 'Sorting...' : 'Loading...'}</p>
+              ) : (
+                <div>{renderedData}</div>
+              )}
+            </div>
+          ) : (
+            <div className='m-5 font-bold text-red-500'>
+              API data loading error occoured... (client)
+            </div>
+          )}
         </div>
       </section>
     </main>
