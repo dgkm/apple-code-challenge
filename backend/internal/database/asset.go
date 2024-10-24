@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"interview/internal/types"
 	"strconv"
+	"sync"
 )
 
-const likeFilter = "like '%' || ? || '%'"
+const (
+	likeFilter       = "like '%' || ? || '%'"
+	enableConcurreny = false
+)
 
 const (
 	getAssetCount           = "SELECT count(1) cnt FROM assets"
@@ -75,15 +79,35 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 		}
 
 		var ips []types.IP
-		ips, err = db.FindIPsByAssetId(id)
-		if err != nil {
-			return assets, fmt.Errorf("error loading asset ips, %w", err)
-		}
-
 		var ports []types.Port
-		ports, err = db.FindPortsByAssetId(id)
-		if err != nil {
-			return assets, fmt.Errorf("error loading asset ports, %w", err)
+
+		if enableConcurreny == true {
+			var wg sync.WaitGroup
+
+			wg.Add(2)
+
+			ips, err = db.FindIPsByAssetIdSpawn(&wg, id)
+			if err != nil {
+				return assets, fmt.Errorf("error loading asset ips, %w", err)
+			}
+
+			ports, err = db.FindPortsByAssetIdSpawn(&wg, id)
+			if err != nil {
+				return assets, fmt.Errorf("error loading asset ports, %w", err)
+			}
+
+			wg.Wait()
+		} else {
+			ips, err = db.FindIPsByAssetId(id)
+			if err != nil {
+				return assets, fmt.Errorf("error loading asset ips, %w", err)
+			}
+
+			ports, err = db.FindPortsByAssetId(id)
+			if err != nil {
+				return assets, fmt.Errorf("error loading asset ports, %w", err)
+			}
+
 		}
 
 		asset := types.Asset{
