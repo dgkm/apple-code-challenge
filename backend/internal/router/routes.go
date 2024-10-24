@@ -28,7 +28,7 @@ func (r *Router) getAssets(c *gin.Context) {
 		return
 	}
 
-	assets, err = r.db.GetAllAssets(queryOptions, searchTerm)
+	assets, err = r.db.GetAllAssets(&queryOptions, searchTerm)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

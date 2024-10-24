@@ -34,13 +34,13 @@ func (db *Database) GetAssetsCount(searchTerm string) (int, error) {
 	}
 }
 
-func (db *Database) GetAllAssets(queryOptions types.QueryOptions, searchTerm string) ([]types.Asset, error) {
+func (db *Database) GetAllAssets(queryOptions *types.QueryOptions, searchTerm string) ([]types.Asset, error) {
 	size, _ := strconv.Atoi(queryOptions.Size)
 
 	if forceMaxPageSize {
-		size = 10
-		if maxPageSize > 1 && maxPageSize <= 100 {
+		if size > maxPageSize && maxPageSize > 1 && maxPageSize <= 100 {
 			size = maxPageSize
+			queryOptions.Size = strconv.Itoa(size)
 		}
 	}
 
