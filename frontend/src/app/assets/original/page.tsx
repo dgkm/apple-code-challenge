@@ -18,7 +18,7 @@ export default function HomePage() {
     async function fetchData() {
       try {
         const response = await fetch(
-          `${backendUrl}/api/assets/original?page=1&size=10000`
+          `${backendUrl}/assets/original?page=1&size=10000`
         );
 
         const result = await response.json();
