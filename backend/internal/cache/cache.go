@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"interview/internal/env"
 	"time"
 
 	cache "github.com/chenyahui/gin-cache"
@@ -13,8 +14,11 @@ type Cache struct {
 }
 
 const (
-	cacheExpiry  = time.Minute * 10
-	cacheEnabled = false
+	cacheExpiry = time.Minute * 10
+)
+
+var (
+	cacheEnabled = env.GetBool("CACHING_ENABLED")
 )
 
 func New() *Cache {
@@ -27,7 +31,7 @@ func New() *Cache {
 }
 
 func (c *Cache) CacheUri() gin.HandlerFunc {
-	if cacheEnabled == true {
+	if cacheEnabled {
 		return cache.CacheByRequestURI(c.store, cacheExpiry)
 	}
 	return func(ctx *gin.Context) {

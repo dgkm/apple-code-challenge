@@ -2,14 +2,19 @@ package database
 
 import (
 	"fmt"
+	"interview/internal/env"
 	"interview/internal/types"
 	"strconv"
 	"sync"
 )
 
 const (
-	likeFilter       = "like '%' || ? || '%'"
-	enableConcurreny = false
+	likeFilter = "like '%' || ? || '%'"
+)
+
+var (
+	enableConcurreny = env.GetBool("CONCURRENCY_ENABLED")
+	forceMaxPageSize = env.GetBool("FORCE_MAX_PAGE_SIZE")
 )
 
 const (
@@ -30,6 +35,11 @@ func (db *Database) GetAssetsCount(searchTerm string) (int, error) {
 
 func (db *Database) GetAllAssets(queryOptions types.QueryOptions, searchTerm string) ([]types.Asset, error) {
 	size, _ := strconv.Atoi(queryOptions.Size)
+
+	if forceMaxPageSize {
+		size = 10
+	}
+
 	page, _ := strconv.Atoi(queryOptions.Page)
 
 	if searchTerm != "" {
@@ -81,7 +91,7 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 		var ips []types.IP
 		var ports []types.Port
 
-		if enableConcurreny == true {
+		if enableConcurreny {
 			var wg sync.WaitGroup
 
 			wg.Add(2)
