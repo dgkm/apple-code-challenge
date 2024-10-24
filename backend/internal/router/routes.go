@@ -8,9 +8,9 @@ import (
 )
 
 func (r *Router) AddRoutes() {
-	r.engine.GET("/assets", r.cache.CachePage(r.getAssets))
-	r.engine.GET("/assets/original", r.getAssets)
-	r.engine.GET("/assets/:id", r.cache.CachePage(r.getAssetById))
+	r.engine.GET("/assets", r.cache.CacheUri(), r.getAssets)
+	r.engine.GET("/assets/original", r.cache.CacheUri(), r.getAssets)
+	r.engine.GET("/assets/:id", r.cache.CacheUri(), r.getAssetById)
 }
 
 func (r *Router) getAssets(c *gin.Context) {

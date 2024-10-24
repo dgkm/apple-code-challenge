@@ -3,20 +3,22 @@ package cache
 import (
 	"time"
 
-	"github.com/gin-contrib/cache"
-	"github.com/gin-contrib/cache/persistence"
+	cache "github.com/chenyahui/gin-cache"
+	"github.com/chenyahui/gin-cache/persist"
 	"github.com/gin-gonic/gin"
 )
 
 type Cache struct {
-	store *persistence.InMemoryStore
+	store *persist.MemoryStore
 }
 
-const cacheExpiry = time.Minute * 10
-const cacheEnabled = false
+const (
+	cacheExpiry  = time.Minute * 10
+	cacheEnabled = false
+)
 
 func New() *Cache {
-	store := persistence.NewInMemoryStore(time.Second)
+	store := persist.NewMemoryStore(cacheExpiry)
 	c := &Cache{
 		store: store,
 	}
@@ -24,9 +26,11 @@ func New() *Cache {
 	return c
 }
 
-func (c *Cache) CachePage(handle gin.HandlerFunc) gin.HandlerFunc {
+func (c *Cache) CacheUri() gin.HandlerFunc {
 	if cacheEnabled == true {
-		return cache.CachePage(c.store, cacheExpiry, handle)
+		return cache.CacheByRequestURI(c.store, cacheExpiry)
 	}
-	return handle
+	return func(ctx *gin.Context) {
+		ctx.Next()
+	}
 }
