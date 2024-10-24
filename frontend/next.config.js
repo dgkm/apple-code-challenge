@@ -1,3 +1,5 @@
+const API_URL = process.env.API_URL || 'http://localhost:8080';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -44,6 +46,14 @@ const nextConfig = {
     fileLoaderRule.exclude = /\.svg$/i;
 
     return config;
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${API_URL}/:path*`,
+      },
+    ];
   },
 };
 
