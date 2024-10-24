@@ -4,9 +4,12 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"interview/internal/env"
 )
 
-const forceGenerate = false
+var (
+	forceGenerate = env.GetBool("FORCE_GENERATE_SIGNATURE")
+)
 
 func GenerateSignature(data string) (string, error) {
 	hash := sha256.New()

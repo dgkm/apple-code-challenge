@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"interview/internal/utils/generator"
 	"interview/internal/utils/signature"
+	"log"
 )
 
 type Asset struct {
@@ -34,6 +35,7 @@ func GenerateAsset() Asset {
 
 func (asset *Asset) AddSignature() error {
 	if len(asset.Signature) == 0 || signature.ForceGenerate() {
+		log.Default().Printf("forced signature generation")
 		data := asset.Host + asset.Comment + asset.Owner
 		signature, err := signature.GenerateSignature(data)
 
