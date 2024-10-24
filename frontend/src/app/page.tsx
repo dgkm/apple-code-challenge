@@ -8,7 +8,7 @@ import { Changes } from '@/improvements/Changes';
 
 export default function HomePage() {
   return (
-    <PageSection title='Identified Improvements or Implemented Changes'>
+    <PageSection title='List of Implemented Changes and Improvements'>
       <Changes />
     </PageSection>
   );

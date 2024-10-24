@@ -45,7 +45,6 @@ export const getAssetById = async (id: string): Promise<AssetType> => {
   });
 
   if (response.status != 200) {
-    console.log(response.status);
     throw new Error(`${response.status}: ${response.statusText}`);
   }
 
