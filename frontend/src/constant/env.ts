@@ -5,4 +5,4 @@ export const showLogger = isLocal
   ? true
   : process.env.NEXT_PUBLIC_SHOW_LOGGER === 'true' ?? false;
 
-export const backendUrl = process.env.NEXT_BACKEND_URL ?? 'http://localhost:8080';
+export const backendUrl = process.env.NEXT_BACKEND_URL ?? 'http://localhost:3000/api';

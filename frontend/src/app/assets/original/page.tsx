@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { AssetType, IPType, PortType } from '@/components/custom/types/types';
 import ButtonLink from '@/components/links/ButtonLink';
 
+import { backendUrl } from '@/constant/env';
+
 import Logo from '~/svg/Logo.svg';
 
 export default function HomePage() {
@@ -16,7 +18,7 @@ export default function HomePage() {
     async function fetchData() {
       try {
         const response = await fetch(
-          'http://localhost:8080/assets/original?page=1&size=10000'
+          `${backendUrl}/api/assets/original?page=1&size=10000`
         );
 
         const result = await response.json();
