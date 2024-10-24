@@ -5,6 +5,7 @@ import (
 	"interview/internal/types"
 	"log"
 	"math/rand"
+	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -81,25 +82,36 @@ func main() {
 			log.Fatal(err)
 		}
 
-		// Insert related IPs
-		for j := 0; j < rand.Intn(3)+1; j++ { // Each asset has 1-3 IPs
-			ip := types.GenerateIP()
-			_, err := insertIPStmt.Exec(assetID, ip.Address, ip.Signature)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+		var wg sync.WaitGroup
 
-		// Insert related Ports
-		for j := 0; j < rand.Intn(5)+1; j++ { // Each asset has 1-5 ports
-			port := types.GeneratePort()
-			_, err := insertPortStmt.Exec(assetID, port.Port, port.Signature)
-			if err != nil {
-				log.Fatal(err)
+		wg.Add(2)
+		go func() {
+			defer wg.Done()
+			// Insert related IPs
+			for j := 0; j < rand.Intn(3)+1; j++ { // Each asset has 1-3 IPs
+				ip := types.GenerateIP()
+				_, err := insertIPStmt.Exec(assetID, ip.Address, ip.Signature)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
-		}
+		}()
 
-		if i%100 == 0 {
+		go func() {
+			defer wg.Done()
+			// Insert related Ports
+			for j := 0; j < rand.Intn(5)+1; j++ { // Each asset has 1-5 ports
+				port := types.GeneratePort()
+				_, err := insertPortStmt.Exec(assetID, port.Port, port.Signature)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+		}()
+
+		wg.Wait()
+
+		if i%500 == 0 {
 			log.Printf("Inserted %d/%d entries", i, totalEntries)
 		}
 	}
