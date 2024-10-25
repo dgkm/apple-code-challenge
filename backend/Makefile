@@ -11,7 +11,13 @@ lint:
 	~/go/bin/golangci-lint run ./...
 
 test:
-	CONFIG_FILE="`pwd`/.env" go test -v "./tests/..."
+	CONFIG_FILE="`pwd`/.env" ~/go/bin/gotest -v "./tests/..."
+
+depgraph:
+	~/go/bin/godepgraph -s -novendor ./cmd/api | dot -Tpng -o ./diagrams/dependency_graph.png
+
+start-dev:
+	~/go/bin/air
 
 start:
 	CONFIG_FILE="`pwd`/.env" go run cmd/api/main.go
