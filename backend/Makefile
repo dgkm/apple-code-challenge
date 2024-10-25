@@ -7,8 +7,8 @@ lint:
 	~/go/bin/golangci-lint run ./...
 
 test:
-	cd backend && go test -v "./tests/..."
+	go test -v "./tests/..."
 
 start:
-	cd backend && go run cmd/api/main.go
+	go run cmd/api/main.go
 
