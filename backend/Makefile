@@ -1,14 +1,18 @@
 
+CURRENT_DIR := $(shell pwd)
 
 load-db:
-	go run cmd/db/main.go
+	CONFIG_FILE="`pwd`/.env" go run cmd/db/main.go
 
 lint:
 	~/go/bin/golangci-lint run ./...
 
 test:
-	go test -v "./tests/..."
+	CONFIG_FILE="`pwd`/.env" go test -v "./tests/..."
 
 start:
-	go run cmd/api/main.go
+	CONFIG_FILE="`pwd`/.env" go run cmd/api/main.go
+
+build:
+	go build -v -o ${CURRENT_DIR}/bin ./...
 

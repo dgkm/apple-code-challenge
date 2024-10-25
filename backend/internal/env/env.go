@@ -9,10 +9,14 @@ import (
 )
 
 func getVariable(key string) string {
-	err := godotenv.Load(".env")
+	configFile := os.Getenv("CONFIG_FILE")
+	if configFile == "" {
+		configFile = ".env"
+	}
+	err := godotenv.Load(configFile)
 
 	if err != nil {
-		log.Fatalf("Error loading .env file\n")
+		log.Fatalf("Error loading .env file: %v\n", err)
 	}
 
 	return os.Getenv(key)
