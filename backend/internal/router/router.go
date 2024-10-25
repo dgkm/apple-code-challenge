@@ -3,6 +3,7 @@ package router
 import (
 	"interview/internal/cache"
 	"interview/internal/database"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,5 +39,8 @@ func (r *Router) Initialize() {
 }
 
 func (r *Router) Run() {
-	r.engine.Run(":8080")
+	err := r.engine.Run(":8080")
+	if err != nil {
+		log.Fatalf("unable to start the server")
+	}
 }

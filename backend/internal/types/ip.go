@@ -18,7 +18,7 @@ func GenerateIP() IP {
 		Address: rIp,
 	}
 
-	ip.AddSignataure()
+	_ = ip.AddSignataure()
 	return ip
 }
 

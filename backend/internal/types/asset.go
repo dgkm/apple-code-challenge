@@ -28,7 +28,7 @@ func GenerateAsset() Asset {
 		Owner:   owner,
 	}
 
-	asset.AddSignature()
+	_ = asset.AddSignature()
 
 	return asset
 }

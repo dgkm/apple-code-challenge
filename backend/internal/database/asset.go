@@ -134,7 +134,7 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 			Signature: assetSignature,
 		}
 
-		asset.AddAssetSignatures()
+		_ = asset.AddAssetSignatures()
 
 		assets = append(assets, asset)
 	}

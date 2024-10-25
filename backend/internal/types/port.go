@@ -18,7 +18,7 @@ func GeneratePort() Port {
 		Port: rPort,
 	}
 
-	port.AddSignataure()
+	_ = port.AddSignataure()
 
 	return port
 }
