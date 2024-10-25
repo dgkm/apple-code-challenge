@@ -2,10 +2,11 @@ package database
 
 import (
 	"fmt"
-	"interview/internal/env"
-	"interview/internal/types"
 	"strconv"
 	"sync"
+
+	"interview/internal/env"
+	"interview/internal/types"
 )
 
 const (
@@ -61,7 +62,6 @@ func (db *Database) getAssetCount(query string, args ...any) (int, error) {
 	var count int
 
 	rows, err := db.Pool.Query(query, args...)
-
 	if err != nil {
 		return count, fmt.Errorf("error loading assets, %w", err)
 	}
@@ -79,7 +79,6 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 	var assets []types.Asset
 
 	rows, err := db.Pool.Query(query, args...)
-
 	if err != nil {
 		return assets, fmt.Errorf("error loading assets, %w", err)
 	}

@@ -1,9 +1,10 @@
 package router
 
 import (
+	"log"
+
 	"interview/internal/cache"
 	"interview/internal/database"
-	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,12 +30,12 @@ func New(database *database.Database) *Router {
 }
 
 func (r *Router) Initialize() {
-	//configure engine
+	// configure engine
 	r.ConfigLogger()
 	r.ConfigCors()
 	r.ConfigGzip()
 
-	//add routes
+	// add routes
 	r.AddRoutes()
 }
 

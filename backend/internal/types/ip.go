@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+
 	"interview/internal/utils/generator"
 	"interview/internal/utils/signature"
 )
@@ -27,7 +28,6 @@ func (ip *IP) AddSignataure() error {
 		ipData := ip.Address
 
 		signature, err := signature.GenerateSignature(ipData)
-
 		if err != nil {
 			return fmt.Errorf("unable to add signature to IP, %w", err)
 		}

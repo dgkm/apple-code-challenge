@@ -2,8 +2,9 @@ package database
 
 import (
 	"fmt"
-	"interview/internal/types"
 	"sync"
+
+	"interview/internal/types"
 )
 
 const (

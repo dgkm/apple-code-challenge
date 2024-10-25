@@ -1,17 +1,17 @@
 package main
 
 import (
-	"interview/internal/database"
-	"interview/internal/types"
 	"log"
 	"math/rand"
 	"sync"
+
+	"interview/internal/database"
+	"interview/internal/types"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-
 	var err error
 
 	db := database.NewDatabase()

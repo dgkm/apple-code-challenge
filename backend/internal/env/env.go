@@ -14,7 +14,6 @@ func getVariable(key string) string {
 		configFile = ".env"
 	}
 	err := godotenv.Load(configFile)
-
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v\n", err)
 	}

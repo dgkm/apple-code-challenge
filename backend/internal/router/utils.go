@@ -25,5 +25,4 @@ func getQueryOptions(c *gin.Context) types.QueryOptions {
 	}
 
 	return options
-
 }

@@ -2,9 +2,10 @@ package types
 
 import (
 	"fmt"
+	"log"
+
 	"interview/internal/utils/generator"
 	"interview/internal/utils/signature"
-	"log"
 )
 
 type Asset struct {
@@ -38,27 +39,25 @@ func (asset *Asset) AddSignature() error {
 		log.Default().Printf("forced signature generation")
 		data := asset.Host + asset.Comment + asset.Owner
 		signature, err := signature.GenerateSignature(data)
-
 		if err != nil {
 			return fmt.Errorf("unable to add signature to Asset, %w", err)
 		}
 
 		asset.Signature = signature
 
-		//log.Default().Printf("Generated asset signature: %s \n", asset.Signature)
+		// log.Default().Printf("Generated asset signature: %s \n", asset.Signature)
 	}
 	return nil
 }
 
 func (asset *Asset) AddAssetSignatures() error {
-
 	err := asset.AddSignature()
 	if err != nil {
 		return err
 	}
 
 	for _, ip := range asset.IPs {
-		//newAsset.IPs[i] = AddIPSignataure(&ip)
+		// newAsset.IPs[i] = AddIPSignataure(&ip)
 		err = ip.AddSignataure()
 		if err != nil {
 			return err
@@ -66,7 +65,7 @@ func (asset *Asset) AddAssetSignatures() error {
 	}
 
 	for _, port := range asset.Ports {
-		//newAsset.Ports[i] = *AddPortSignataure(&port)
+		// newAsset.Ports[i] = *AddPortSignataure(&port)
 		err = port.AddSignataure()
 		if err != nil {
 			return err

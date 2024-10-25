@@ -4,6 +4,9 @@ CURRENT_DIR := $(shell pwd)
 load-db:
 	CONFIG_FILE="`pwd`/.env" go run cmd/db/main.go
 
+format:
+	~/go/bin/gofumpt -l -w .
+
 lint:
 	~/go/bin/golangci-lint run ./...
 

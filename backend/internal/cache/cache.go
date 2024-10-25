@@ -1,8 +1,9 @@
 package cache
 
 import (
-	"interview/internal/env"
 	"time"
+
+	"interview/internal/env"
 
 	cache "github.com/chenyahui/gin-cache"
 	"github.com/chenyahui/gin-cache/persist"
@@ -17,9 +18,7 @@ const (
 	cacheExpiry = time.Minute * 10
 )
 
-var (
-	cacheEnabled = env.GetBool("CACHING_ENABLED")
-)
+var cacheEnabled = env.GetBool("CACHING_ENABLED")
 
 func New() *Cache {
 	store := persist.NewMemoryStore(cacheExpiry)

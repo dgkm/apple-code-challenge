@@ -1,8 +1,9 @@
 package types
 
 import (
-	"interview/internal/types"
 	"testing"
+
+	"interview/internal/types"
 )
 
 func TestGenerateAsset(t *testing.T) {

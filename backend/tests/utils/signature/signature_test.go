@@ -1,8 +1,9 @@
 package signature
 
 import (
-	"interview/internal/utils/signature"
 	"testing"
+
+	"interview/internal/utils/signature"
 )
 
 func TestGenerateSignature(t *testing.T) {

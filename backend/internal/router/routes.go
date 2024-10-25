@@ -1,8 +1,9 @@
 package router
 
 import (
-	"interview/internal/types"
 	"net/http"
+
+	"interview/internal/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +15,6 @@ func (r *Router) AddRoutes() {
 }
 
 func (r *Router) getAssets(c *gin.Context) {
-
 	queryOptions := getQueryOptions(c)
 
 	searchTerm := c.Query("search")
@@ -54,7 +54,6 @@ func (r *Router) getAssetById(c *gin.Context) {
 	}
 
 	assets, err = r.db.GetAllAssetsById(assetID)
-
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
