@@ -35,7 +35,7 @@ export const changeLog: ChangeLog[] = [
     description:
       'The original project structure did not follow best practices and was difficult to maintain.',
     solution: `
-    The backend project was refactored to follow a more organized and maintainable structure. 
+    The backend project was refactored to follow 3-tier architecture, a more organized and maintainable structure. 
     Key components such as router, cache, database, environment configurations, types, utilities, 
     and signature modules were modularized for improved readability and maintainability. 
     For example, the database module now supports dynamic query mapping, which helps eliminate 
@@ -52,7 +52,7 @@ export const changeLog: ChangeLog[] = [
     Key elements like layout, navigation, and reusable components were missing.`,
     solution: `
     The frontend project was updated with a well-structured layout, 
-    incorporating additional pages and components to support new features. 
+    incorporating additional pages and components to support new features in a lean way. 
     These updates include features such as asset listing, implemented using two approaches: 
     1) pagination and 2) infinite loading. The original page was also updated to demonstrate maximum 
     page limit enforcement. Additionally, the home page was improved with a changelog to 
