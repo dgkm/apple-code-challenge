@@ -35,7 +35,7 @@ export const changeLog: ChangeLog[] = [
     description:
       'The original project structure did not follow best practices and was difficult to maintain.',
     solution: `
-    The backend project was refactored to follow 3-tier architecture, a more organized and maintainable structure. 
+    The backend project was refactored to follow multi-tier/MVC architecture, a more organized and maintainable structure. 
     Key components such as router, cache, database, environment configurations, types, utilities, 
     and signature modules were modularized for improved readability and maintainability. 
     For example, the database module now supports dynamic query mapping, which helps eliminate 
