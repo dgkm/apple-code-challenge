@@ -6,8 +6,13 @@ const nextConfig = {
     dirs: ['src'],
   },
 
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+
   reactStrictMode: true,
-  swcMinify: true,
 
   // Uncoment to add domain whitelist
   // images: {

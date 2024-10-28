@@ -27,24 +27,23 @@ export default function Search({
     const params = new URLSearchParams(searchParams);
     if (search) {
       params.set(searchParam, search);
+      params.delete('page');
+      params.set('page', '1');
+      onChange && onChange(search);
       replace(`${pathname}?${params.toString()}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replace, search, searchParams]);
+  }, [replace, search]);
 
   const handleSearch = useDebouncedCallback((term) => {
+    setSearch(term);
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
-    if (term) {
-      params.set(searchParam, term);
-      setSearch(term);
-      onChange && onChange(term);
-    } else {
+    if (!term) {
       params.delete(searchParam);
       onChange && onChange('');
+      replace(`${pathname}?${params.toString()}`);
     }
-    replace(`${pathname}?${params.toString()}`);
-  }, 500);
+  }, 300);
 
   return (
     <div className='relative flex flex-1 flex-shrink-0 m-2'>

@@ -60,4 +60,22 @@ export const changeLog: ChangeLog[] = [
     ensuring better maintainability and scalability.`,
     status: Status.complete,
   },
+  {
+    category: Category.practices,
+    issue: 'Frontend Async JSX Component Support',
+    description: `
+    The initial project typescript version didn't support async JSX server components.`,
+    solution: `
+    The frontend project was updated latest version of the typescript and @types/react packages to support async JSX server components.`,
+    status: Status.complete,
+  },
+  {
+    category: Category.practices,
+    issue: 'Frontend Page Caching and Logging Issue',
+    description: `
+    The NextJs version (14) on the initial project didn't support latest caching updates and logging.`,
+    solution: `
+    The project was updated to the latest NextJs 15 version and the required logging enabled and caching was verified.`,
+    status: Status.complete,
+  },
 ];
