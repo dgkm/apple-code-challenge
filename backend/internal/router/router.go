@@ -37,6 +37,8 @@ func (r *Router) Initialize() {
 
 	r.ConfigTimeout()
 
+	r.ConfigContentType()
+
 	// add routes
 	r.AddRoutes()
 }
