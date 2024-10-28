@@ -2,12 +2,19 @@ package router
 
 import (
 	"fmt"
+	"interview/internal/env"
 	"interview/internal/router/middleware"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	throttle "github.com/s12i/gin-throttle"
+)
+
+var (
+	maxEventsPerSec = env.GetInt("THROTTLE_MAX_REQUESTS_PER_SECOND")
+	maxBurstSize    = env.GetInt("THROTTLE_MAX_BURST_SIZE")
 )
 
 func (r *Router) ConfigLogger() {
@@ -46,4 +53,8 @@ func (r *Router) ConfigGzip() {
 
 func (r *Router) ConfigContentType() {
 	r.engine.Use(middleware.ContentMiddleware())
+}
+
+func (r *Router) ConfigureThrottle() {
+	r.engine.Use(throttle.Throttle(maxEventsPerSec, maxBurstSize))
 }
