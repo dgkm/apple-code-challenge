@@ -78,8 +78,8 @@ export default function InfinitePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
-  const renderedData = assets.map((item) => {
-    return <AssetItem key={item.ID} item={item} />;
+  const renderedData = assets.map((item, index) => {
+    return <AssetItem key={`${index}-${item.Signature}`} item={item} />;
   });
 
   const totalLoaded = (

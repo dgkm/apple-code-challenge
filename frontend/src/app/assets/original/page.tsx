@@ -59,7 +59,7 @@ export default function HomePage() {
 
   const renderedData = sortedData.map((item) => {
     return (
-      <div key={item.ID} className='p-4'>
+      <div key={item.Signature} className='p-4'>
         <p>{`ID: ${item.ID}`}</p>
         <p>{`Host: ${item.Host}`}</p>
         <p>{`Comment: ${item.Comment}`}</p>

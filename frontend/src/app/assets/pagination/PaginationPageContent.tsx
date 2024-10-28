@@ -26,7 +26,7 @@ export default async function PaginationPageContent({
   });
 
   const renderedData = assets.map((item) => {
-    return <AssetItem key={item.ID} item={item} />;
+    return <AssetItem key={item.Signature} item={item} />;
   });
 
   const pagination = (
