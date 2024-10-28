@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"interview/internal/router/middleware"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -33,6 +34,10 @@ func (r *Router) ConfigCors() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+}
+
+func (r *Router) ConfigTimeout() {
+	r.engine.Use(middleware.TimeoutMiddleware())
 }
 
 func (r *Router) ConfigGzip() {

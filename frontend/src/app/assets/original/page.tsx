@@ -15,6 +15,8 @@ export default function HomePage() {
   const [isSorting, setIsSorting] = useState(false);
   const [error, setError] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -22,6 +24,13 @@ export default function HomePage() {
         const response = await fetch(
           `${backendUrl}/assets/original?page=1&size=10000`
         );
+
+        if (response.status != 200) {
+          setError(true);
+          const errorResponse = await response.json();
+
+          setErrorMessage(`${response.statusText}: ${errorResponse?.error}`);
+        }
 
         const result = await response.json();
 
@@ -91,7 +100,8 @@ export default function HomePage() {
             </div>
           ) : (
             <div className='m-5 font-bold text-red-500'>
-              API data loading error occoured... (client)
+              API data loading error occoured...
+              <p>{errorMessage}</p>
             </div>
           )}
         </div>

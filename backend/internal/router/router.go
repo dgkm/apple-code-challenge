@@ -35,6 +35,8 @@ func (r *Router) Initialize() {
 	r.ConfigCors()
 	r.ConfigGzip()
 
+	r.ConfigTimeout()
+
 	// add routes
 	r.AddRoutes()
 }
