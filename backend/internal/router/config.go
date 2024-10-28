@@ -29,7 +29,7 @@ func (r *Router) ConfigLogger() {
 func (r *Router) ConfigCors() {
 	r.engine.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowMethods:     []string{"GET"}, // "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
@@ -42,4 +42,8 @@ func (r *Router) ConfigTimeout() {
 
 func (r *Router) ConfigGzip() {
 	r.engine.Use(gzip.Gzip(gzip.DefaultCompression))
+}
+
+func (r *Router) ConfigContentType() {
+	r.engine.Use(middleware.ContentMiddleware())
 }
