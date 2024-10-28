@@ -19,6 +19,8 @@ var (
 	maxPageSize      = env.GetInt("MAX_PAGE_SIZE")
 )
 
+// TODO: if supported convert queries to work on composite left join
+
 const (
 	getAssetCount           = "SELECT count(1) cnt FROM assets"
 	getAssetCountWithSearch = "SELECT count(1) cnt FROM assets where host " + likeFilter
