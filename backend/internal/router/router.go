@@ -31,9 +31,13 @@ func New(database *database.Database) *Router {
 
 func (r *Router) Initialize() {
 	// configure engine
-	r.ConfigureThrottle()
-	r.ConfigLogger()
+	r.ConfigThrottle()
 	r.ConfigCors()
+
+	r.ConfigSessionStore()
+	r.ConfigCsrf()
+
+	r.ConfigLogger()
 	r.ConfigGzip()
 
 	r.ConfigTimeout()

@@ -6,6 +6,7 @@ import (
 	"interview/internal/types"
 
 	"github.com/gin-gonic/gin"
+	csrf "github.com/utrack/gin-csrf"
 )
 
 func (r *Router) AddRoutes() {
@@ -39,6 +40,7 @@ func (r *Router) getAssets(c *gin.Context) {
 		Metadata: types.MetadataType{
 			QueryOptions: queryOptions,
 			Total:        count,
+			Token:        csrf.GetToken(c),
 		},
 	})
 }
