@@ -4,7 +4,7 @@ import { paginationPageTitle } from '@/constant/constants';
 
 import PaginationPageContent from './PaginationPageContent';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 export default async function PaginationPage(
   props: Readonly<{

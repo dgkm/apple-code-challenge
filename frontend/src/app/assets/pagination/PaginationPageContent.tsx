@@ -4,8 +4,8 @@ import Pagination from '@/components/custom/Pagination';
 import Search from '@/components/custom/Search';
 import { AssetItem } from '@/components/custom/types/AssetItem';
 
-export const dynamic = 'force-dynamic';
-export const fetchCache = 'default-no-store';
+// export const dynamic = 'force-dynamic';
+// export const fetchCache = 'default-no-store';
 
 interface PaginationPageContentProps {
   pageNumber?: number;
@@ -17,15 +17,12 @@ export default async function PaginationPageContent({
   pageNumber,
   searchTerm,
 }: Readonly<PaginationPageContentProps>) {
-  const time = Date.now().toString();
-
   const {
     data: assets = [],
     metadata: { total },
   } = await getAssets({
     page: pageNumber,
     search: searchTerm,
-    time,
   });
 
   const renderedData = assets.map((item) => {

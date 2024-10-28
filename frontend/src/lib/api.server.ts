@@ -13,17 +13,15 @@ export const getAssets = async ({
   page = 1,
   size = 10,
   search,
-  time,
 }: QueryOptions): Promise<ResponseType<AssetType[]>> => {
   'use server';
 
   const response = await fetch(
     `${backendUrl}/assets?page=${page}&size=${size}${
       search ? '&search=' + search : ''
-    }${time ? '&time=' + time : ''}`,
+    }`,
     {
-      // : { revalidate: 0 },
-      cache: 'no-cache',
+      next: { revalidate: 60 },
     }
   );
 
@@ -40,7 +38,7 @@ export const getAssetById = async (id: string): Promise<AssetType> => {
   'use server';
 
   const response = await fetch(`${backendUrl}/assets/${id}`, {
-    cache: 'no-store',
+    next: { revalidate: 60 },
   });
 
   if (response.status != 200) {
