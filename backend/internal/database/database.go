@@ -36,7 +36,9 @@ func NewInstance() (database *Database) {
 func NewInstanceWithLogger() (database *Database) {
 	fmt.Println("initialiasing database with logger")
 	loggerAdapter := zerologadapter.New(zerolog.New(os.Stdout))
-	pool := sqldblogger.OpenDriver(dbFileName, &sqlite3.SQLiteDriver{}, loggerAdapter)
+	pool := sqldblogger.OpenDriver(dbFileName, &sqlite3.SQLiteDriver{}, loggerAdapter,
+		sqldblogger.WithSQLQueryAsMessage(true), sqldblogger.WithMinimumLevel(sqldblogger.LevelTrace),
+	)
 	err := pool.Ping()
 
 	if err != nil {
