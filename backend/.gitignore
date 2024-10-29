@@ -5,3 +5,5 @@
 .env.local
 
 /tmp
+
+build-errors.log
