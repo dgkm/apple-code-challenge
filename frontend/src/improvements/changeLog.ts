@@ -39,8 +39,9 @@ export const changeLog: ChangeLog[] = [
     Key components such as router, cache, database, environment configurations, types, utilities, 
     and signature modules were modularized for improved readability and maintainability. 
     For example, the database module now supports dynamic query mapping, which helps eliminate 
-    code duplication and simplifies the creation of query variations. This new structure ensures that the project 
-    is more scalable and adheres to industry best practices.
+    code duplication and simplifies the creation of query variations. 
+    This new structure ensures that the project is more scalable and adheres to industry standard 
+    security, performance, service realiability, architecture and coding best practices.
       `,
     status: Status.complete,
   },
