@@ -14,6 +14,8 @@ const nextConfig = {
 
   reactStrictMode: true,
 
+  poweredByHeader: false,
+
   // Uncoment to add domain whitelist
   // images: {
   //   domains: [
