@@ -1,5 +1,33 @@
 const API_URL = process.env.API_URL || 'http://localhost:8080';
 
+const cspHeader = `
+    default-src 'self';
+    script-src 'self';
+    style-src 'self';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+`;
+
+const securityHeaders = [
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN',
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: cspHeader.replace(/\n/g, ''),
+  },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -10,6 +38,11 @@ const nextConfig = {
     fetches: {
       fullUrl: true,
     },
+  },
+
+  // works only with the build and start
+  async headers() {
+    return [{ source: '/(.*)', headers: securityHeaders }];
   },
 
   reactStrictMode: true,

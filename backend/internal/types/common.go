@@ -11,8 +11,7 @@ type QueryOptions struct {
 
 type MetadataType struct {
 	QueryOptions
-	Total int    `json:"total"`
-	Token string `json:"token"`
+	Total int `json:"total"`
 }
 
 type ResponseType struct {
