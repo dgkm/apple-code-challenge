@@ -83,4 +83,6 @@ func (r *Router) ConfigCsrf() {
 			c.Abort()
 		},
 	}))
+
+	r.engine.Use(middleware.SsrfMiddleware())
 }
