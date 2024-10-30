@@ -9,10 +9,6 @@ import (
 	"interview/internal/types"
 )
 
-const (
-	likeFilter = "like '%' || ? || '%'"
-)
-
 var (
 	enableConcurreny = env.GetBool("CONCURRENCY_ENABLED")
 	forceMaxPageSize = env.GetBool("FORCE_MAX_PAGE_SIZE")
@@ -23,15 +19,19 @@ var (
 
 const (
 	getAssetCount           = "SELECT count(1) cnt FROM assets"
-	getAssetCountWithSearch = "SELECT count(1) cnt FROM assets where host " + likeFilter
+	getAssetCountWithSearch = "SELECT count(1) cnt FROM assets where host like ?"
 	getAllAssets            = "SELECT id, host, comment, owner, signature FROM assets order by host asc limit ? offset ?"
-	getAllAssetsWithSearch  = "SELECT id, host, comment, owner, signature FROM assets where host " + likeFilter + " order by host asc limit ? offset ?"
+	getAllAssetsWithSearch  = "SELECT id, host, comment, owner, signature FROM assets where host like ? order by host asc limit ? offset ?"
 	getAllAssetsById        = "SELECT id, host, comment, owner, signature FROM assets WHERE id = ? order by host asc"
 )
 
+func getLikeSearchTerm(searchTerm string) string {
+	return "%" + searchTerm + "%"
+}
+
 func (db *Database) GetAssetsCount(searchTerm string) (int, error) {
 	if searchTerm != "" {
-		return db.getAssetCount(getAssetCountWithSearch, searchTerm)
+		return db.getAssetCount(getAssetCountWithSearch, getLikeSearchTerm(searchTerm))
 	} else {
 		return db.getAssetCount(getAssetCount)
 	}
@@ -50,7 +50,7 @@ func (db *Database) GetAllAssets(queryOptions *types.QueryOptions, searchTerm st
 	page, _ := strconv.Atoi(queryOptions.Page)
 
 	if searchTerm != "" {
-		return db.getAssets(getAllAssetsWithSearch, searchTerm, size, (page-1)*size)
+		return db.getAssets(getAllAssetsWithSearch, getLikeSearchTerm(searchTerm), size, (page-1)*size)
 	} else {
 		return db.getAssets(getAllAssets, size, (page-1)*size)
 	}
