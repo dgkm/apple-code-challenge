@@ -13,6 +13,7 @@ const cspHeader = `
     upgrade-insecure-requests;
 `;
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const securityHeaders = [
   {
     key: 'X-Content-Type-Options',
@@ -42,7 +43,7 @@ const nextConfig = {
 
   // works only with the build and start
   async headers() {
-    return [{ source: '/(.*)', headers: securityHeaders }];
+    return [];
   },
 
   reactStrictMode: true,
