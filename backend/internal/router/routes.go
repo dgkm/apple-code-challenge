@@ -1,7 +1,9 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"interview/internal/types"
 
@@ -22,6 +24,9 @@ func (r *Router) AddRoutes() {
 }
 
 func (r *Router) getAssets(c *gin.Context) {
+
+	start := time.Now()
+
 	queryOptions := getQueryOptions(c)
 
 	searchTerm := c.Query("search")
@@ -41,11 +46,14 @@ func (r *Router) getAssets(c *gin.Context) {
 		return
 	}
 
+	duration := fmt.Sprintf("%.6fms", float64(time.Since(start).Nanoseconds())/1000/1000)
+
 	c.JSON(http.StatusOK, &types.ResponseType{
 		Data: assets,
 		Metadata: types.MetadataType{
 			QueryOptions: queryOptions,
 			Total:        count,
+			Duration:     duration,
 		},
 	})
 }
