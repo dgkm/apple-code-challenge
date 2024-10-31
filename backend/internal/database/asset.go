@@ -3,7 +3,6 @@ package database
 import (
 	"fmt"
 	"strconv"
-	"sync"
 
 	"interview/internal/env"
 	"interview/internal/types"
@@ -41,7 +40,7 @@ func (db *Database) GetAllAssets(queryOptions *types.QueryOptions, searchTerm st
 	size, _ := strconv.Atoi(queryOptions.Size)
 
 	if forceMaxPageSize {
-		if size > maxPageSize && maxPageSize > 1 && maxPageSize <= 100 {
+		if size > maxPageSize && maxPageSize > 1 && maxPageSize >= 100 {
 			size = maxPageSize
 			queryOptions.Size = strconv.Itoa(size)
 		}
@@ -97,21 +96,26 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 		var ports []types.Port
 
 		if enableConcurreny {
-			var wg sync.WaitGroup
+			sIPs := make(chan []types.IP)
+			sPorts := make(chan []types.Port)
 
-			wg.Add(2)
+			go func(c chan []types.IP) {
+				dIps, err := db.FindIPsByAssetId(id)
+				if err != nil {
+					fmt.Printf("error loading asset ips, %v", err)
+				}
+				c <- dIps
+			}(sIPs)
 
-			ips, err = db.FindIPsByAssetIdSpawn(&wg, id)
-			if err != nil {
-				return assets, fmt.Errorf("error loading asset ips, %w", err)
-			}
+			go func(c chan []types.Port) {
+				dPorts, err := db.FindPortsByAssetId(id)
+				if err != nil {
+					fmt.Printf("error loading asset ports, %v", err)
+				}
+				c <- dPorts
+			}(sPorts)
 
-			ports, err = db.FindPortsByAssetIdSpawn(&wg, id)
-			if err != nil {
-				return assets, fmt.Errorf("error loading asset ports, %w", err)
-			}
-
-			wg.Wait()
+			ips, ports = <-sIPs, <-sPorts
 		} else {
 			ips, err = db.FindIPsByAssetId(id)
 			if err != nil {

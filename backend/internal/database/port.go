@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"sync"
 
 	"interview/internal/types"
 )
@@ -10,12 +9,6 @@ import (
 const (
 	findPortsByAssetIdQuery = "SELECT port, signature FROM ports WHERE asset_id = ?"
 )
-
-func (db *Database) FindPortsByAssetIdSpawn(wg *sync.WaitGroup, id int) ([]types.Port, error) {
-	defer wg.Done()
-	ports, err := db.FindPortsByAssetId(id)
-	return ports, err
-}
 
 func (db *Database) FindPortsByAssetId(id int) ([]types.Port, error) {
 	return db.getPorts(findPortsByAssetIdQuery, id)

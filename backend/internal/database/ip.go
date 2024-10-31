@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"sync"
 
 	"interview/internal/types"
 )
@@ -10,12 +9,6 @@ import (
 const (
 	findIPsByAssetIdQuery string = "SELECT address, signature FROM ips WHERE asset_id = ?"
 )
-
-func (db *Database) FindIPsByAssetIdSpawn(wg *sync.WaitGroup, id int) ([]types.IP, error) {
-	defer wg.Done()
-	ips, err := db.FindIPsByAssetId(id)
-	return ips, err
-}
 
 func (db *Database) FindIPsByAssetId(id int) ([]types.IP, error) {
 	return db.getIPs(findIPsByAssetIdQuery, id)
