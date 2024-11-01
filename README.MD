@@ -9,19 +9,23 @@ Candidates are encouraged to improve both the **Go backend** and the **Next.js f
 ### Requirements
 
 1. **Performance Optimization**:
-    - The app should handle large datasets efficiently. The backend must be optimized for fast API responses, and the frontend should render the data without unnecessary delays.
+
+   - The app should handle large datasets efficiently. The backend must be optimized for fast API responses, and the frontend should render the data without unnecessary delays.
 
 2. **Signature Calculation**:
-    - The signature generation functionality **must be preserved**. Each asset, along with its associated ports and IPs, must have a signature calculated and included in the response.
+
+   - The signature generation functionality **must be preserved**. Each asset, along with its associated ports and IPs, must have a signature calculated and included in the response.
 
 3. **Aesthetic Frontend**:
-    - The frontend must be user-friendly and visually appealing. Candidates should focus on presenting the data in a clear and structured way that enhances the user experience.
+
+   - The frontend must be user-friendly and visually appealing. Candidates should focus on presenting the data in a clear and structured way that enhances the user experience.
 
 4. **Search Functionality**:
-    - A search feature should be implemented in the frontend to filter the assets by the **"host"** column. The search should be efficient, responsive, and provide relevant results quickly.
+
+   - A search feature should be implemented in the frontend to filter the assets by the **"host"** column. The search should be efficient, responsive, and provide relevant results quickly.
 
 5. **Problem Identification and Documentation**:
-    - Candidates should **identify all performance problems** (both in the frontend and backend), **fix them**, and **document the changes**. A list of identified inefficiencies and their solutions must be provided.
+   - Candidates should **identify all performance problems** (both in the frontend and backend), **fix them**, and **document the changes**. A list of identified inefficiencies and their solutions must be provided.
 
 ## Notes
 
@@ -35,14 +39,14 @@ We strive for excellence in everything we do, and we are looking for top-tier ta
    Run the following command to create and populate the SQLite database with 250,000 assets:
 
    ```bash
-   go run cmd/db/main.go
+   make load-db
    ```
 
 2. **Start the API Server**  
    Run the following command to start the Go API server:
 
    ```bash
-   go run cmd/api/main.go
+   make start-dev
    ```
 
    The API server will be running at `http://localhost:8080`.
@@ -53,14 +57,14 @@ We strive for excellence in everything we do, and we are looking for top-tier ta
    Navigate to the frontend directory and install the required dependencies:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. **Start the Next.js Application**  
    Run the following command to start the frontend application:
 
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
    The frontend will be running at `http://localhost:3000`.
@@ -87,7 +91,11 @@ We strive for excellence in everything we do, and we are looking for top-tier ta
 ---
 
 This version clearly specifies the focus areas, including performance improvement, signature functionality, and search implementation, while emphasizing the need for documentation of the problems identified and fixed. Let me know if this works or if you need any further adjustments!# CodeInterview
+
 # CodeInterview
+
 # CodeInterview
+
 # CodeInterview
+
 # CodeInterview
