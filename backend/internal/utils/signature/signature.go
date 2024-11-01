@@ -8,16 +8,18 @@ import (
 	"interview/internal/env"
 )
 
-var forceGenerate = env.GetBool("FORCE_GENERATE_SIGNATURE")
+var (
+	forceGenerate = env.GetBool("FORCE_GENERATE_SIGNATURE")
+)
 
-func GenerateSignature(data string) (string, error) {
+func GenerateSignature(data *string) (*string, error) {
 	hash := sha256.New()
-	_, err := hash.Write([]byte(data))
+	_, err := hash.Write([]byte(*data))
 	if err != nil {
-		return "", fmt.Errorf("unable to create hash, %w", err)
+		return nil, fmt.Errorf("unable to create hash, %w", err)
 	}
 	signature := hex.EncodeToString(hash.Sum(nil))
-	return signature, nil
+	return &signature, nil
 }
 
 func ForceGenerate() bool {

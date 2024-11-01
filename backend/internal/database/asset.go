@@ -28,15 +28,15 @@ func getLikeSearchTerm(searchTerm string) string {
 	return "%" + searchTerm + "%"
 }
 
-func (db *Database) GetAssetsCount(searchTerm string) (int, error) {
-	if searchTerm != "" {
-		return db.getAssetCount(getAssetCountWithSearch, getLikeSearchTerm(searchTerm))
+func (db *Database) GetAssetsCount(searchTerm *string) (*int, error) {
+	if searchTerm != nil {
+		return db.getAssetCount(getAssetCountWithSearch, getLikeSearchTerm(*searchTerm))
 	} else {
 		return db.getAssetCount(getAssetCount)
 	}
 }
 
-func (db *Database) GetAllAssets(queryOptions *types.QueryOptions, searchTerm string) ([]types.Asset, error) {
+func (db *Database) GetAllAssets(queryOptions *types.QueryOptions, searchTerm *string) (*[]types.Asset, error) {
 	size, _ := strconv.Atoi(queryOptions.Size)
 
 	if forceMaxPageSize {
@@ -48,40 +48,40 @@ func (db *Database) GetAllAssets(queryOptions *types.QueryOptions, searchTerm st
 
 	page, _ := strconv.Atoi(queryOptions.Page)
 
-	if searchTerm != "" {
-		return db.getAssets(getAllAssetsWithSearch, getLikeSearchTerm(searchTerm), size, (page-1)*size)
+	if searchTerm != nil {
+		return db.getAssets(getAllAssetsWithSearch, getLikeSearchTerm(*searchTerm), size, (page-1)*size)
 	} else {
 		return db.getAssets(getAllAssets, size, (page-1)*size)
 	}
 }
 
-func (db *Database) GetAllAssetsById(assetID string) ([]types.Asset, error) {
+func (db *Database) GetAllAssetsById(assetID *string) (*[]types.Asset, error) {
 	return db.getAssets(getAllAssetsById, assetID)
 }
 
-func (db *Database) getAssetCount(query string, args ...any) (int, error) {
+func (db *Database) getAssetCount(query string, args ...any) (*int, error) {
 	var count int
 
 	rows, err := db.Pool.Query(query, args...)
 	if err != nil {
-		return count, fmt.Errorf("error loading assets, %w", err)
+		return &count, fmt.Errorf("error loading assets, %w", err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		if err := rows.Scan(&count); err != nil {
-			return count, err
+			return &count, err
 		}
 	}
-	return count, nil
+	return &count, nil
 }
 
-func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) {
+func (db *Database) getAssets(query string, args ...any) (*[]types.Asset, error) {
 	var assets []types.Asset
 
 	rows, err := db.Pool.Query(query, args...)
 	if err != nil {
-		return assets, fmt.Errorf("error loading assets, %w", err)
+		return &assets, fmt.Errorf("error loading assets, %w", err)
 	}
 	defer rows.Close()
 
@@ -89,17 +89,17 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 		var id int
 		var host, comment, owner, assetSignature string
 		if err := rows.Scan(&id, &host, &comment, &owner, &assetSignature); err != nil {
-			return assets, err
+			return &assets, err
 		}
 
-		var ips []types.IP
-		var ports []types.Port
+		var ips *[]types.IP
+		var ports *[]types.Port
 
 		if enableConcurreny {
-			sIPs := make(chan []types.IP)
-			sPorts := make(chan []types.Port)
+			sIPs := make(chan *[]types.IP)
+			sPorts := make(chan *[]types.Port)
 
-			go func(c chan []types.IP) {
+			go func(c chan *[]types.IP) {
 				dIps, err := db.FindIPsByAssetId(id)
 				if err != nil {
 					fmt.Printf("error loading asset ips, %v", err)
@@ -107,7 +107,7 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 				c <- dIps
 			}(sIPs)
 
-			go func(c chan []types.Port) {
+			go func(c chan *[]types.Port) {
 				dPorts, err := db.FindPortsByAssetId(id)
 				if err != nil {
 					fmt.Printf("error loading asset ports, %v", err)
@@ -119,12 +119,12 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 		} else {
 			ips, err = db.FindIPsByAssetId(id)
 			if err != nil {
-				return assets, fmt.Errorf("error loading asset ips, %w", err)
+				return &assets, fmt.Errorf("error loading asset ips, %w", err)
 			}
 
 			ports, err = db.FindPortsByAssetId(id)
 			if err != nil {
-				return assets, fmt.Errorf("error loading asset ports, %w", err)
+				return &assets, fmt.Errorf("error loading asset ports, %w", err)
 			}
 
 		}
@@ -134,8 +134,8 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 			Host:      host,
 			Comment:   comment,
 			Owner:     owner,
-			IPs:       ips,
-			Ports:     ports,
+			IPs:       *ips,
+			Ports:     *ports,
 			Signature: assetSignature,
 		}
 
@@ -148,5 +148,5 @@ func (db *Database) getAssets(query string, args ...any) ([]types.Asset, error) 
 		assets = make([]types.Asset, 0)
 	}
 
-	return assets, nil
+	return &assets, nil
 }

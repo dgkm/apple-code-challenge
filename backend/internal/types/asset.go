@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"interview/internal/env"
 	"interview/internal/utils/generator"
 	"interview/internal/utils/signature"
 )
@@ -17,6 +18,10 @@ type Asset struct {
 	Ports     []Port `json:"Ports"`
 	Signature string `json:"Signature"`
 }
+
+var (
+	debugMode = env.GetBool("DEBUG_MODE")
+)
 
 func GenerateAsset() Asset {
 	host := fmt.Sprintf("%s.%s", generator.RandomWord(), generator.RandomDomain())
@@ -36,16 +41,16 @@ func GenerateAsset() Asset {
 
 func (asset *Asset) AddSignature() error {
 	if len(asset.Signature) == 0 || signature.ForceGenerate() {
-		if signature.ForceGenerate() {
+		if signature.ForceGenerate() && debugMode {
 			log.Default().Printf("forced signature generation")
 		}
 		data := asset.Host + asset.Comment + asset.Owner
-		signature, err := signature.GenerateSignature(data)
+		signature, err := signature.GenerateSignature(&data)
 		if err != nil {
 			return fmt.Errorf("unable to add signature to Asset, %w", err)
 		}
 
-		asset.Signature = signature
+		asset.Signature = *signature
 
 		// log.Default().Printf("Generated asset signature: %s \n", asset.Signature)
 	}
