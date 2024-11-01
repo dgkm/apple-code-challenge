@@ -12,7 +12,10 @@ import (
 	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
 )
 
-const dbFileName = "assets.db"
+const (
+	dbFileName = "assets.db"
+	dbDSN      = "file:" + dbFileName + "?_journal_mode=OFF&cache=shared&_sync=0&_cslike=false"
+)
 
 type Database struct {
 	Pool *sql.DB
@@ -20,7 +23,7 @@ type Database struct {
 
 func NewInstance() (database *Database) {
 	fmt.Println("initialiasing database")
-	pool, err := sql.Open("sqlite3", dbFileName)
+	pool, err := sql.Open("sqlite3", dbDSN)
 	if err != nil {
 		log.Fatal(err)
 		panic(err)
@@ -36,7 +39,7 @@ func NewInstance() (database *Database) {
 func NewInstanceWithLogger() (database *Database) {
 	fmt.Println("initialiasing database with logger")
 	loggerAdapter := zerologadapter.New(zerolog.New(os.Stdout))
-	pool := sqldblogger.OpenDriver(dbFileName, &sqlite3.SQLiteDriver{}, loggerAdapter,
+	pool := sqldblogger.OpenDriver(dbDSN, &sqlite3.SQLiteDriver{}, loggerAdapter,
 		sqldblogger.WithSQLQueryAsMessage(true), sqldblogger.WithMinimumLevel(sqldblogger.LevelTrace),
 	)
 	err := pool.Ping()
