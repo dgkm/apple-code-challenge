@@ -35,12 +35,13 @@ export const changeLog: ChangeLog[] = [
     description:
       'The original project structure did not follow best practices and was difficult to maintain.',
     solution: `
-    The backend project was refactored to follow 3-tier architecture, a more organized and maintainable structure. 
+    The backend project was refactored to follow multi-tier/MVC architecture, a more organized and maintainable structure. 
     Key components such as router, cache, database, environment configurations, types, utilities, 
     and signature modules were modularized for improved readability and maintainability. 
     For example, the database module now supports dynamic query mapping, which helps eliminate 
-    code duplication and simplifies the creation of query variations. This new structure ensures that the project 
-    is more scalable and adheres to industry best practices.
+    code duplication and simplifies the creation of query variations. 
+    This new structure ensures that the project is more scalable and adheres to industry standard 
+    security, performance, service realiability, architecture and coding best practices.
       `,
     status: Status.complete,
   },
@@ -58,6 +59,24 @@ export const changeLog: ChangeLog[] = [
     page limit enforcement. Additionally, the home page was improved with a changelog to 
     track updates and modifications. This refactoring aligns the project with best practices, 
     ensuring better maintainability and scalability.`,
+    status: Status.complete,
+  },
+  {
+    category: Category.practices,
+    issue: 'Frontend Async JSX Component Support',
+    description: `
+    The initial project typescript version didn't support async JSX server components.`,
+    solution: `
+    The frontend project was updated latest version of the typescript and @types/react packages to support async JSX server components.`,
+    status: Status.complete,
+  },
+  {
+    category: Category.practices,
+    issue: 'Frontend Page Caching and Logging Issue',
+    description: `
+    The NextJs version (14) on the initial project didn't support latest caching updates and logging.`,
+    solution: `
+    The project was updated to the latest NextJs 15 version and the required logging enabled and caching was verified.`,
     status: Status.complete,
   },
 ];

@@ -10,10 +10,10 @@ import { AssetType } from '@/components/custom/types/types';
 
 import { detailsPageTitle } from '@/constant/constants';
 
+type AssetDetailsParams = Promise<{ id: string }>;
+
 interface AssetDetailsPageProps {
-  params: {
-    id: string;
-  };
+  params: AssetDetailsParams;
 }
 
 export default async function AssetDetailsPage({
@@ -21,7 +21,7 @@ export default async function AssetDetailsPage({
 }: Readonly<AssetDetailsPageProps>) {
   'use server';
 
-  const { id } = params;
+  const { id } = await params;
   const asset: AssetType = await getAssetById(id);
 
   if (!asset) {

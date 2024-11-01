@@ -2,7 +2,7 @@
 CURRENT_DIR := $(shell pwd)
 
 load-db:
-	CONFIG_FILE="`pwd`/.env" go run cmd/db/main.go
+	CONFIG_FILE="`pwd`/.env.local" go run cmd/db/main.go
 
 format:
 	~/go/bin/gofumpt -l -w .
@@ -11,13 +11,13 @@ lint:
 	~/go/bin/golangci-lint run ./...
 
 test:
-	CONFIG_FILE="`pwd`/.env" ~/go/bin/gotest -v "./tests/..."
+	CONFIG_FILE="`pwd`/.env.local" ~/go/bin/gotest -v "./tests/..."
 
 depgraph:
 	~/go/bin/godepgraph -s -novendor ./cmd/api | dot -Tpng -o ./diagrams/dependency_graph.png
 
 start-dev:
-	~/go/bin/air
+	CONFIG_FILE="`pwd`/.env.local" ~/go/bin/air
 
 start:
 	CONFIG_FILE="`pwd`/.env" go run cmd/api/main.go

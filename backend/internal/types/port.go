@@ -28,12 +28,12 @@ func (port *Port) AddSignataure() error {
 	if len(port.Signature) == 0 || signature.ForceGenerate() {
 		portData := fmt.Sprintf("%d", port.Port)
 
-		signature, err := signature.GenerateSignature(portData)
+		signature, err := signature.GenerateSignature(&portData)
 		if err != nil {
 			return fmt.Errorf("unable to add signature to Port, %w", err)
 		}
 
-		port.Signature = signature
+		port.Signature = *signature
 
 	}
 	return nil

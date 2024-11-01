@@ -1,5 +1,3 @@
-import { revalidatePath } from 'next/cache';
-
 import { AssetType, ResponseType } from '@/components/custom/types/types';
 
 import { backendUrl } from '@/constant/env';
@@ -8,6 +6,7 @@ interface QueryOptions {
   page?: number;
   size?: number;
   search?: string;
+  time?: string;
 }
 
 export const getAssets = async ({
@@ -22,7 +21,7 @@ export const getAssets = async ({
       search ? '&search=' + search : ''
     }`,
     {
-      next: { revalidate: 0 },
+      next: { revalidate: 60 },
     }
   );
 
@@ -32,8 +31,6 @@ export const getAssets = async ({
 
   const result: ResponseType<AssetType[]> = await response.json();
 
-  revalidatePath('/assets');
-
   return result;
 };
 
@@ -41,7 +38,7 @@ export const getAssetById = async (id: string): Promise<AssetType> => {
   'use server';
 
   const response = await fetch(`${backendUrl}/assets/${id}`, {
-    cache: 'no-store',
+    next: { revalidate: 60 },
   });
 
   if (response.status != 200) {

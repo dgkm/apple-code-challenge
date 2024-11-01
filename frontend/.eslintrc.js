@@ -4,13 +4,19 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  plugins: ['@typescript-eslint', 'simple-import-sort', 'unused-imports'],
+  plugins: [
+    '@typescript-eslint',
+    'simple-import-sort',
+    'unused-imports',
+    // 'spellcheck',
+  ],
   extends: [
     'eslint:recommended',
     'next',
     'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended',
     'prettier',
+    'plugin:security/recommended-legacy',
   ],
   rules: {
     'no-unused-vars': 'off',
@@ -23,6 +29,8 @@ module.exports = {
       'warn',
       { props: 'never', children: 'never' },
     ],
+
+    // 'spellcheck/spell-checker': ['warn'],
 
     //#region  //*=========== Unused Import ===========
     '@typescript-eslint/no-unused-vars': 'off',

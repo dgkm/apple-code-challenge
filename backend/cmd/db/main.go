@@ -27,6 +27,8 @@ func main() {
 			signature TEXT
 		);
 
+		CREATE UNIQUE INDEX idx_assets_host_unq on assets(host);
+
 		CREATE TABLE ips (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			asset_id INTEGER,
@@ -35,13 +37,19 @@ func main() {
 			FOREIGN KEY(asset_id) REFERENCES assets(id)
 		);
 
+		CREATE INDEX idx_ips_asset_id on ips(asset_id);
+
 		CREATE TABLE ports (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			asset_id INTEGER,
 			port INTEGER NOT NULL,
 			signature TEXT,
 			FOREIGN KEY(asset_id) REFERENCES assets(id)
-		);`
+		);
+		
+		CREATE INDEX idx_ports_asset_id on ports(asset_id);
+		
+		`
 
 	_, err = db.Pool.Exec(createTablesSQL)
 	if err != nil {
@@ -68,7 +76,7 @@ func main() {
 	defer insertPortStmt.Close()
 
 	// Insert data: 100.000 rows
-	totalEntries := 10000
+	totalEntries := 100000
 	for i := 0; i < totalEntries; i++ {
 		// Insert asset
 		asset := types.GenerateAsset()
